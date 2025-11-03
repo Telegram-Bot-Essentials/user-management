@@ -32,7 +32,7 @@ class BotUsersFeature
                 Keyboard::inlineButton([
                     'text' => __('tbe-user-management::bot_users.main.keys.user', [
                         'fullName' => $botUser->telegramUser->full_name,
-                        'credit' => currency()->priceFormat($botUser->balance),
+                        'credit' => 'n/a',
                         'suspendStatus' => $botUser->suspend ? __('tbe-user-management::general.status.disabledEmoji') : __('tbe-user-management::general.status.enabledEmoji'),
                     ]),
                     'callback_data' => encodeCallback(self::$type, ['show', $botUser->id, $page])

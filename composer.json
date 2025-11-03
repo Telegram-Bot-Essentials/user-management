@@ -7,7 +7,7 @@
         "php": "^8.2",
         "laravel/framework": "^12",
         "elyar/personal-laravel-helpers": "v0.0.2",
-        "telegram-bot-essentials/essence": "dev-separation-step-by-step"
+      "telegram-bot-essentials/essence": "*"
     },
     "license": "MIT",
     "autoload": {
@@ -23,10 +23,10 @@
     ],
     "minimum-stability": "stable",
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/elyar0/telegram-bot-essentials"
-        }
+      {
+        "type": "vcs",
+        "url": "https://github.com/Elyar0/telegram-bot-essentials"
+      }
     ],
     "extra": {
         "laravel": {

@@ -5,6 +5,7 @@ namespace TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Essence\Enums\Roles;
+use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
@@ -17,38 +18,10 @@ class BotUsersQuery extends CallbackQuery
     protected int $perm = Roles::ADMIN->value;
 
     /**
-     * @throws BindingResolutionException
+     * @throws InvalidPageNumber
      * @throws TelegramSDKException
-     * @throws LogicException
      */
-    public function handle(array $params): void
-    {
-        $this->params = $params;
-        switch (strtolower($params[0])) {
-            case "start":
-                $this->start();
-                break;
-            case "set_start_page":
-                $this->setStartPage();
-                break;
-
-            case "show":
-                $this->show();
-                break;
-            case "suspend":
-                $this->suspend();
-                break;
-            case "role":
-                $this->role();
-                break;
-
-            case "balance":
-                $this->balance();
-                break;
-        }
-    }
-
-    private function start()
+    function start(): void
     {
         $page = intval($this->params[1] ?? 1);
         $currentPage = intval($this->params[2] ?? 0);
@@ -60,7 +33,7 @@ class BotUsersQuery extends CallbackQuery
      * @throws BindingResolutionException
      * @throws LogicException
      */
-    private function setStartPage(): void
+    function setStartPage(): void
     {
         $messageMeta = MessageMeta::makeWithCurrentMessage();
         $messageMeta->lockAction('Waiting for page number');
@@ -77,14 +50,17 @@ class BotUsersQuery extends CallbackQuery
     /**
      * @throws TelegramSDKException
      */
-    private function show(): void
+    function show(): void
     {
         $botUser = BotUser::findOrFail($this->params[1]);
         $lastPage = intval($this->params[2] ?? 1);
         BotUsersFeature::show($botUser, $lastPage)->update();
     }
 
-    private function suspend()
+    /**
+     * @throws TelegramSDKException
+     */
+    function suspend(): void
     {
         $botUser = BotUser::findOrFail($this->params[1]);
         $botUser->suspend = $this->params[2];
@@ -94,7 +70,10 @@ class BotUsersQuery extends CallbackQuery
         BotUsersFeature::show($botUser, $lastPage)->update();
     }
 
-    private function role()
+    /**
+     * @throws TelegramSDKException
+     */
+    function role(): void
     {
         $botUser = BotUser::findOrFail($this->params[1]);
         $roles = array_map(fn($role) => $role->value, Roles::cases());
@@ -108,7 +87,7 @@ class BotUsersQuery extends CallbackQuery
         BotUsersFeature::show($botUser, $lastPage)->update();
     }
 
-    private function balance()
+    function balance(): void
     {
         $type = $this->params[1];
         $botUser = BotUser::findOrFail($this->params[2]);
