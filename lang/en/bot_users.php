@@ -17,7 +17,6 @@ return [
                 ."Telegram phone number: :userTel\r\n"
                 ."\r\n"
                 ."Role: :userRole\r\n"
-                ."Credit: :userCredit\r\n"
                 ."Status: :userSuspendStatus\r\n"
                 ."Joined At: :userCreatedAt\r\n"
                 ."Last Interaction: :userUpdatedAt\r\n"

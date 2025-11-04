@@ -17,7 +17,6 @@ return [
                 ."شماره تلفن تلگرام: :userTel\r\n"
                 ."\r\n"
                 ."نقش: :userRole\r\n"
-                ."اعتبار: :userCredit\r\n"
                 ."وضعیت: :userSuspendStatus\r\n"
                 ."تاریخ عضویت: :userCreatedAt\r\n"
                 ."آخرین تعامل: :userUpdatedAt\r\n"
