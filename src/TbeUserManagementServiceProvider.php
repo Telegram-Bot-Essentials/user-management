@@ -6,7 +6,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin\BotUsersQuery;
-use TelegramBotEssentials\UserManagement\Telegram\ReplyKeys\Admin\BotUsersKey;
 use TelegramBotEssentials\UserManagement\Telegram\StateAnswers\Admin\BotUsersAnswer;
 
 class TbeUserManagementServiceProvider extends ServiceProvider
@@ -19,14 +18,14 @@ class TbeUserManagementServiceProvider extends ServiceProvider
     {
         $this->registerPublishing();
 
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'tbe-user-management');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'tbe-user-management');
 
         callbackQueryBus()->addCallbackQueries([
-            BotUsersQuery::class
+            BotUsersQuery::class,
         ]);
 
         stateAnswerBus()->addStateAnswers([
-            BotUsersAnswer::class
+            BotUsersAnswer::class,
         ]);
     }
 
@@ -34,7 +33,7 @@ class TbeUserManagementServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../lang' => resource_path('lang/vendor/tbe-user-management'),
+                __DIR__.'/../lang' => resource_path('lang/vendor/tbe-user-management'),
             ], 'tbe-user-management-translations');
         }
     }
