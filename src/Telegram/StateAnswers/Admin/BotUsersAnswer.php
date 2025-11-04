@@ -26,24 +26,6 @@ class BotUsersAnswer extends StateAnswer
     ];
 
     /**
-     * @param string $method
-     * @throws BindingResolutionException
-     * @throws LogicException
-     * @throws TelegramSDKException|InvalidPageNumber
-     */
-    public function handle(string $method): void
-    {
-        switch (strtolower($method)) {
-            case "set_start_page":
-                $this->setStartPage();
-                break;
-            case "balance":
-                $this->balance();
-                break;
-        }
-    }
-
-    /**
      * @throws TelegramSDKException
      * @throws LogicException
      * @throws BindingResolutionException
@@ -94,11 +76,11 @@ class BotUsersAnswer extends StateAnswer
             }
             if ($amount->compareTo(BigDecimal::zero()) > 0) {
                 wHook()->runForUser($botUser, function () use ($amount) {
-                    gateways()->wallet()->addAmount($amount);
+//                    gateways()->wallet()->addAmount($amount);
                 });
             }else {
                 wHook()->runForUser($botUser, function () use ($amount) {
-                    gateways()->wallet()->takeAmount($amount->multipliedBy(BigDecimal::of('-1')));
+//                    gateways()->wallet()->takeAmount($amount->multipliedBy(BigDecimal::of('-1')));
                 });
             }
         } elseif ($type == 'set') {
@@ -108,7 +90,7 @@ class BotUsersAnswer extends StateAnswer
             );
             $amount = BigDecimal::of($amount);
             wHook()->runForUser($botUser, function () use ($amount) {
-                gateways()->wallet()->setAmount($amount);
+//                gateways()->wallet()->setAmount($amount);
             });
         }
 
@@ -117,21 +99,10 @@ class BotUsersAnswer extends StateAnswer
         wHook()->user()->changeState();
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
-            'text' => "User " . $botUser->telegramUser->full_name . " balance updated to " . currency()->priceFormat($botUser->balance),
+            'text' => "User " . $botUser->telegramUser->full_name . " balance updated to " . 'x', //currency()->priceFormat($botUser->balance)
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
 
         $messageMeta->updateAndContinueAction($data);
-    }
-
-    /**
-     * @throws TelegramSDKException
-     */
-    function cancel(): void
-    {
-        $messageMeta = MessageMeta::find($this->params['message_meta_id']);
-        if ($messageMeta) {
-            $messageMeta->continueAction();
-        }
     }
 }

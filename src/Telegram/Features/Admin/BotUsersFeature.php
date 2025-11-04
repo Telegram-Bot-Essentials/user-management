@@ -20,7 +20,7 @@ class BotUsersFeature
         $text = __('tbe-user-management::bot_users.main.text.index', [
             'userCount' => BotUser::count(),
             'usersJoinedLastDay' => BotUser::where('created_at', '>', now()->subDays(1))->count(),
-            'totalUserCredits' => currency()->priceFormat(BotUser::sum('balance')),
+            'totalUserCredits' => 'n/a',
         ]);
         $users = BotUser::paginate(perPage: 10, page: $page);
         $replyMarkup = Keyboard::make()->inline();
@@ -32,10 +32,10 @@ class BotUsersFeature
                 Keyboard::inlineButton([
                     'text' => __('tbe-user-management::bot_users.main.keys.user', [
                         'fullName' => $botUser->telegramUser->full_name,
-                        'credit' => currency()->priceFormat($botUser->balance),
+                        'credit' => 'n/a',
                         'suspendStatus' => $botUser->suspend ? __('tbe-user-management::general.status.disabledEmoji') : __('tbe-user-management::general.status.enabledEmoji'),
                     ]),
-                    'callback_data' => encodeCallback(self::$type, ['show', $botUser->id, $page])
+                    'callback_data' => encodeCallback(self::$type, 'show', [$botUser->id, $page])
                 ])
             ]);
         }
@@ -61,7 +61,7 @@ class BotUsersFeature
             'userLastName' => $botUser->telegramUser->last_name,
             'userTel' => $botUser->telegramUser->tel,
             'userRole' => $botUser->role,
-            'userCredit' => currency()->priceFormat($botUser->balance),
+            'userCredit' => 'n/a',
             'userSuspendStatus' => $botUser->suspend ?
                 __('tbe-user-management::general.status.suspended', [
                     'suspendedDate' => $botUser->suspended_at?->format('Y-m-d H:i:s')
@@ -76,36 +76,36 @@ class BotUsersFeature
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => $botUser->suspend ? __('tbe-user-management::bot_users.main.keys.userIsSuspended') : __('tbe-user-management::bot_users.main.keys.userIsActive'),
-                'callback_data' => encodeCallback(self::$type, ['suspend', $botUser->id, intval(!$botUser->suspend)])
+                'callback_data' => encodeCallback(self::$type, 'suspend', [$botUser->id, intval(!$botUser->suspend)])
             ])
         ]);
 
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.userRole', ['role' => $botUser->role]),
-                'callback_data' => encodeCallback(self::$type, ['role', $botUser->id, $lastPage])
+                'callback_data' => encodeCallback(self::$type, 'role', [$botUser->id, $lastPage])
             ]),
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.userUpdateData'),
-                'callback_data' => encodeCallback(self::$type, ['show', $botUser->id, $lastPage])
+                'callback_data' => encodeCallback(self::$type, 'show', [$botUser->id, $lastPage])
             ])
         ]);
 
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.addUserBalance'),
-                'callback_data' => encodeCallback(self::$type, ['balance', 'add', $botUser->id, $lastPage])
+                'callback_data' => encodeCallback(self::$type, 'balance', ['add', $botUser->id, $lastPage])
             ]),
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.setUserBalance'),
-                'callback_data' => encodeCallback(self::$type, ['balance', 'set', $botUser->id, $lastPage])
+                'callback_data' => encodeCallback(self::$type, 'balance', ['set', $botUser->id, $lastPage])
             ])
         ]);
 
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::general.keys.back'),
-                'callback_data' => encodeCallback(self::$type, ['start', $lastPage])
+                'callback_data' => encodeCallback(self::$type, 'start', [$lastPage])
             ])
         ]);
 
