@@ -7,8 +7,7 @@ return [
                 ."\r\n"
                 ."\r\n"
                 ."تعداد کاربران: :userCount\r\n"
-                ."کاربران اضافه‌شده در ۲۴ ساعت گذشته: :usersJoinedLastDay\r\n"
-                ."مجموع اعتبار کاربران: :totalUserCredits\r\n",
+                ."کاربران اضافه‌شده در ۲۴ ساعت گذشته: :usersJoinedLastDay\r\n",
             'show_user' => ':userFullName'
                 ."\n\n"
                 ."شناسه کاربر در تلگرام: :userPeerId\r\n"

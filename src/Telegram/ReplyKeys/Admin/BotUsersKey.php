@@ -2,8 +2,11 @@
 
 namespace TelegramBotEssentials\UserManagement\Telegram\ReplyKeys\Admin;
 
+use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Essence\Enums\Roles;
+use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Telegram\ReplyKeys\ReplyKey;
+use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature;
 
 class BotUsersKey extends ReplyKey
 {
@@ -18,5 +21,12 @@ class BotUsersKey extends ReplyKey
         $this->text = __('tbe-user-management::bot_users.reply_key');
     }
 
-    public function handle(): void {}
+    /**
+     * @throws InvalidPageNumber
+     * @throws TelegramSDKException
+     */
+    public function handle(): void
+    {
+        BotUsersFeature::menu()->send();
+    }
 }

@@ -7,8 +7,7 @@ return [
             ."\r\n"
             ."\r\n"
             ."User count: :userCount\r\n"
-            ."Users joined in the last 24 hours: :usersJoinedLastDay\r\n"
-            ."Total user credits: :totalUserCredits\r\n",
+            ."Users joined in the last 24 hours: :usersJoinedLastDay\r\n",
             'show_user' => ':userFullName'
                 ."\n\n"
                 ."Telegram User ID: :userPeerId\r\n"
