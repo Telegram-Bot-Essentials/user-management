@@ -28,6 +28,14 @@ class BotUsersQuery extends CallbackQuery
     }
 
     /**
+     * @throws TelegramSDKException
+     */
+    public function sortMenu(int $lastPage = 1, string $currentSort = 'last_interaction', ?string $direction = null): void
+    {
+        BotUsersFeature::sortMenu($lastPage, botUserSorts()->resolve($currentSort), botUserSorts()->resolveDirection($direction))->update();
+    }
+
+    /**
      * @throws InvalidPageNumber
      * @throws TelegramSDKException
      */

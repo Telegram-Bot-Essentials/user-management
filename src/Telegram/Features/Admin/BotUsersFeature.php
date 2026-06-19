@@ -7,6 +7,7 @@ use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Services\TelegramPaginator;
 use TelegramBotEssentials\Essence\Telegram\TelegramResponse;
+use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
 
 class BotUsersFeature
 {
@@ -36,14 +37,14 @@ class BotUsersFeature
                 'text' => __('tbe-user-management::bot_users.main.keys.sort', [
                     'sort' => botUserSorts()->getSort($sort)->label,
                 ]),
-                'callback_data' => encodeCallback(self::$type, 'sort', [$sort, $direction]),
+                'callback_data' => encodeCallback(self::$type, 'sortMenu', [$page, $sort, $direction]),
             ]),
         ]);
 
         $replyMarkup->row([
             Keyboard::inlineButton([
-                'text' => 'User',
-                'callback_data' => encodeCallback(self::$type, 'sort', [$sort, $direction]),
+                'text' => __('tbe-user-management::bot_users.main.keys.user_column_header'),
+                'callback_data' => encodeCallback(self::$type, 'menu', [$page, 0, $sort, $direction]),
             ]),
             Keyboard::inlineButton([
                 'text' => botUserSorts()->getSort($sort)->label.' '.botUserSorts()->directionIndicator($direction),
@@ -76,6 +77,32 @@ class BotUsersFeature
         return new TelegramResponse(
             text: $text,
             replyMarkup: $replyMarkup
+        );
+    }
+
+    public static function sortMenu(int $lastPage, string $currentSort, string $direction): TelegramResponse
+    {
+        $replyMarkup = Keyboard::make()->inline();
+
+        botUserSorts()->getSorts()->each(function (BotUserSort $sort) use ($replyMarkup, $lastPage, $currentSort, $direction) {
+            $replyMarkup->row([
+                Keyboard::inlineButton([
+                    'text' => ($sort->key === $currentSort ? '✅ ' : '').$sort->label,
+                    'callback_data' => encodeCallback(self::$type, 'menu', [1, 0, $sort->key, $direction]),
+                ]),
+            ]);
+        });
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
+                'text' => __('tbe::general.keys.back'),
+                'callback_data' => encodeCallback(self::$type, 'menu', [$lastPage, 0, $currentSort, $direction]),
+            ]),
+        ]);
+
+        return new TelegramResponse(
+            text: __('tbe-user-management::bot_users.main.text.sort_menu'),
+            replyMarkup: $replyMarkup,
         );
     }
 

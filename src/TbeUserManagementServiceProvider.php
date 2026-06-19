@@ -87,14 +87,5 @@ class TbeUserManagementServiceProvider extends ServiceProvider
                 ? '@'.$user->telegramUser->username
                 : (mb_substr($user->telegramUser->full_name, 0, 16, 'UTF-8') ?: '?'),
         ));
-
-        botUserSorts()->addSort(new BotUserSort(
-            key: 'id',
-            label: __('tbe-user-management::bot_users.sorts.id'),
-            apply: fn ($query, $direction) => $direction === 'asc'
-                ? $query->orderBy('id')
-                : $query->orderByDesc('id'),
-            display: fn (BotUser $user) => '#'.$user->id,
-        ));
     }
 }

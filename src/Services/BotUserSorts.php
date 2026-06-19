@@ -22,24 +22,29 @@ class BotUserSorts
 
     public function getSorts(): Collection
     {
-        return $this->sorts;
+        return $this->sorts->filter(fn (BotUserSort $sort) => $sort->isActive());
     }
 
     public function getSort(string $key): ?BotUserSort
     {
-        return $this->sorts->get($key);
+        $sort = $this->sorts->get($key);
+
+        return ($sort && $sort->isActive()) ? $sort : null;
     }
 
     public function getDefaultKey(): string
     {
         $default = config('tbe-user-management.default_sort', 'last_interaction');
+        $active = $this->getSorts();
 
-        return $this->sorts->has($default) ? $default : $this->sorts->keys()->first() ?? 'last_interaction';
+        return $active->has($default) ? $default : $active->keys()->first() ?? 'last_interaction';
     }
 
     public function resolve(?string $key): string
     {
-        if ($key && $this->sorts->has($key)) {
+        $active = $this->getSorts();
+
+        if ($key && $active->has($key)) {
             return $key;
         }
 
@@ -48,9 +53,9 @@ class BotUserSorts
 
     public function next(string $current): string
     {
-        $keys = $this->sorts->keys()->values()->all();
+        $keys = $this->getSorts()->keys()->values()->all();
 
-        return nextInArray($keys, $current) ?? $keys[0];
+        return nextInArray($keys, $current) ?? $keys[0] ?? $current;
     }
 
     public function resolveDirection(?string $direction): string
@@ -73,6 +78,10 @@ class BotUserSorts
     public function apply(string $key, Builder $query, ?string $direction = null): Builder
     {
         $sort = $this->getSort($this->resolve($key));
+
+        if ($sort === null) {
+            return $query;
+        }
 
         return $sort->applyTo($query, $this->resolveDirection($direction));
     }

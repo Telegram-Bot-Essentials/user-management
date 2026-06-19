@@ -13,7 +13,15 @@ class BotUserSort
         public string $label,
         public Closure $apply,
         public ?Closure $display = null,
+        public bool|Closure $active = true,
     ) {}
+
+    public function isActive(): bool
+    {
+        return $this->active instanceof Closure
+            ? (bool) ($this->active)()
+            : $this->active;
+    }
 
     public function applyTo(Builder $query, string $direction): Builder
     {

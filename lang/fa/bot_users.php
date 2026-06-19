@@ -3,6 +3,7 @@
 return [
     'main' => [
         'text' => [
+            'sort_menu' => 'روش مرتب‌سازی را انتخاب کنید:',
             'index' => 'مدیریت کاربران ربات'
                 ."\r\n"
                 ."\r\n"
@@ -27,6 +28,7 @@ return [
         ],
         'keys' => [
             'sort' => '🔀 مرتب‌سازی: :sort',
+            'user_column_header' => 'کاربر',
             'user' => ':fullName :suspendStatus - :credit',
             'userIsActive' => '✅ کاربر فعال است',
             'userIsSuspended' => '⛔️ کاربر تعلیق شده است',
@@ -41,6 +43,5 @@ return [
         'last_interaction' => 'آخرین تعامل',
         'created_at' => 'تاریخ عضویت',
         'username' => 'نام کاربری',
-        'id' => 'جدیدترین',
     ],
 ];

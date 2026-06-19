@@ -3,6 +3,7 @@
 return [
     'main' => [
         'text' => [
+            'sort_menu' => 'Choose a sort:',
             'index' => 'Manage bot users'
             ."\r\n"
             ."\r\n"
@@ -27,6 +28,7 @@ return [
         ],
         'keys' => [
             'sort' => '🔀 Sort: :sort',
+            'user_column_header' => 'User',
             'user' => ':fullName :suspendStatus - :credit',
             'userIsActive' => '✅ User is active',
             'userIsSuspended' => '⛔️ User is suspended',
@@ -41,6 +43,5 @@ return [
         'last_interaction' => 'Last interaction',
         'created_at' => 'Join date',
         'username' => 'Username',
-        'id' => 'Newest',
     ],
 ];
