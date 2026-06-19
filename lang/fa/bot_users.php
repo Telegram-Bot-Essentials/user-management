@@ -26,6 +26,7 @@ return [
         'answers' => [
         ],
         'keys' => [
+            'sort' => '🔀 مرتب‌سازی: :sort',
             'user' => ':fullName :suspendStatus - :credit',
             'userIsActive' => '✅ کاربر فعال است',
             'userIsSuspended' => '⛔️ کاربر تعلیق شده است',
@@ -36,4 +37,10 @@ return [
         ],
     ],
     'reply_key' => 'کاربران ربات 👥',
+    'sorts' => [
+        'last_interaction' => 'آخرین تعامل',
+        'created_at' => 'تاریخ عضویت',
+        'username' => 'نام کاربری',
+        'id' => 'جدیدترین',
+    ],
 ];

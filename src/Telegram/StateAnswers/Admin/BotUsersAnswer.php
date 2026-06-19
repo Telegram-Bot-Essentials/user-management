@@ -29,14 +29,19 @@ class BotUsersAnswer extends StateAnswer
      * @throws BindingResolutionException
      * @throws InvalidPageNumber
      */
-    public function setMenuPage(): void
+    public function setMenuPage(?string $sort = null, ?string $direction = null): void
     {
         $page = wHook()->update()->message->text;
-        $lastPage = BotUser::paginate(perPage: 10)->lastPage();
+        $sort = botUserSorts()->resolve($sort);
+        $direction = botUserSorts()->resolveDirection($direction);
+        $lastPage = botUserSorts()
+            ->apply($sort, BotUser::query(), $direction)
+            ->paginate(perPage: 10)
+            ->lastPage();
 
         TelegramPaginator::validatePageInput($page, $lastPage);
 
-        $data = BotUsersFeature::menu(intval($page));
+        $data = BotUsersFeature::menu(intval($page), sort: $sort, direction: $direction);
 
         wHook()->user()->changeState();
         wHook()->api()->sendMessage([

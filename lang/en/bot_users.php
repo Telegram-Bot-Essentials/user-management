@@ -26,6 +26,7 @@ return [
         'answers' => [
         ],
         'keys' => [
+            'sort' => '🔀 Sort: :sort',
             'user' => ':fullName :suspendStatus - :credit',
             'userIsActive' => '✅ User is active',
             'userIsSuspended' => '⛔️ User is suspended',
@@ -36,4 +37,10 @@ return [
         ],
     ],
     'reply_key' => 'Bot Users 👥',
+    'sorts' => [
+        'last_interaction' => 'Last interaction',
+        'created_at' => 'Join date',
+        'username' => 'Username',
+        'id' => 'Newest',
+    ],
 ];

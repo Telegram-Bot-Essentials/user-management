@@ -15,18 +15,44 @@ class BotUsersFeature
     /**
      * @throws InvalidPageNumber
      */
-    public static function menu(int $page = 1, int $currentPage = 0): TelegramResponse
+    public static function menu(int $page = 1, int $currentPage = 0, ?string $sort = null, ?string $direction = null): TelegramResponse
     {
+        $sort = botUserSorts()->resolve($sort);
+        $direction = botUserSorts()->resolveDirection($direction);
+
         $text = __('tbe-user-management::bot_users.main.text.index', [
             'userCount' => BotUser::count(),
             'usersJoinedLastDay' => BotUser::where('created_at', '>', now()->subDays(1))->count(),
         ]);
-        $users = BotUser::with('telegramUser')->paginate(perPage: 10, page: $page);
+        $users = botUserSorts()
+            ->apply($sort, BotUser::query()->with('telegramUser'), $direction)
+            ->paginate(perPage: 10, page: $page);
         TelegramPaginator::validatePageNumber($page, $currentPage, $users);
 
         $replyMarkup = Keyboard::make()->inline();
-        $users->each(function (BotUser $user) use ($replyMarkup, $page) {
-            $callback = encodeCallback(self::$type, 'show', [$user->id, $page]);
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
+                'text' => __('tbe-user-management::bot_users.main.keys.sort', [
+                    'sort' => botUserSorts()->getSort($sort)->label,
+                ]),
+                'callback_data' => encodeCallback(self::$type, 'sort', [$sort, $direction]),
+            ]),
+        ]);
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
+                'text' => 'User',
+                'callback_data' => encodeCallback(self::$type, 'sort', [$sort, $direction]),
+            ]),
+            Keyboard::inlineButton([
+                'text' => botUserSorts()->getSort($sort)->label.' '.botUserSorts()->directionIndicator($direction),
+                'callback_data' => encodeCallback(self::$type, 'toggleDirection', [$sort, $direction, $page]),
+            ]),
+        ]);
+
+        $users->each(function (BotUser $user) use ($replyMarkup, $page, $sort, $direction) {
+            $callback = encodeCallback(self::$type, 'show', [$user->id, $page, $sort, $direction]);
             if ($user->telegramUser->username) {
                 $name = '@'.$user->telegramUser->username;
             } else {
@@ -39,13 +65,13 @@ class BotUsersFeature
                     'callback_data' => $callback,
                 ]),
                 Keyboard::inlineButton([
-                    'text' => $user->last_interaction->shortRelativeToNowDiffForHumans(),
+                    'text' => botUserSorts()->getSort($sort)->displayValue($user),
                     'callback_data' => $callback,
                 ]),
             ]);
         });
 
-        $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(self::$type, $page, $users->lastPage(), 'menu', 'setMenuPage'));
+        $replyMarkup->row(self::makeNavigationButtonsRow($page, $users->lastPage(), $sort, $direction));
 
         return new TelegramResponse(
             text: $text,
@@ -53,8 +79,11 @@ class BotUsersFeature
         );
     }
 
-    public static function show(BotUser $botUser, int $lastPage = 1): TelegramResponse
+    public static function show(BotUser $botUser, int $lastPage = 1, ?string $sort = null, ?string $direction = null): TelegramResponse
     {
+        $sort = botUserSorts()->resolve($sort);
+        $direction = botUserSorts()->resolveDirection($direction);
+
         $text = __('tbe-user-management::bot_users.main.text.show_user', [
             'userFullName' => "<a href=\"tg://user?id={$botUser->telegramUser->peer_id}\">{$botUser->telegramUser->full_name}</a>",
             'userPeerId' => $botUser->telegramUser->peer_id,
@@ -77,25 +106,25 @@ class BotUsersFeature
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => $botUser->suspend ? __('tbe-user-management::bot_users.main.keys.userIsSuspended') : __('tbe-user-management::bot_users.main.keys.userIsActive'),
-                'callback_data' => encodeCallback(self::$type, 'suspend', [$botUser->id, intval(! $botUser->suspend)]),
+                'callback_data' => encodeCallback(self::$type, 'suspend', [$botUser->id, intval(! $botUser->suspend), $lastPage, $sort, $direction]),
             ]),
         ]);
 
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.userRole', ['role' => $botUser->role]),
-                'callback_data' => encodeCallback(self::$type, 'role', [$botUser->id, $lastPage]),
+                'callback_data' => encodeCallback(self::$type, 'role', [$botUser->id, $lastPage, $sort, $direction]),
             ]),
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.userUpdateData'),
-                'callback_data' => encodeCallback(self::$type, 'show', [$botUser->id, $lastPage]),
+                'callback_data' => encodeCallback(self::$type, 'show', [$botUser->id, $lastPage, $sort, $direction]),
             ]),
         ]);
 
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe::general.keys.back'),
-                'callback_data' => encodeCallback(self::$type, 'menu', [$lastPage]),
+                'callback_data' => encodeCallback(self::$type, 'menu', [$lastPage, 0, $sort, $direction]),
             ]),
         ]);
 
@@ -104,5 +133,16 @@ class BotUsersFeature
             replyMarkup: $replyMarkup,
             parseMode: 'HTML'
         );
+    }
+
+    private static function makeNavigationButtonsRow(int $page, int $lastPage, string $sort, string $direction): array
+    {
+        return [
+            Keyboard::inlineButton(['text' => '<<', 'callback_data' => encodeCallback(self::$type, 'menu', [1, $page, $sort, $direction])]),
+            Keyboard::inlineButton(['text' => '<', 'callback_data' => encodeCallback(self::$type, 'menu', [$page - 1, $page, $sort, $direction])]),
+            Keyboard::inlineButton(['text' => "$page/{$lastPage}", 'callback_data' => encodeCallback(self::$type, 'setMenuPage', [$sort, $direction])]),
+            Keyboard::inlineButton(['text' => '>', 'callback_data' => encodeCallback(self::$type, 'menu', [$page + 1, $page, $sort, $direction])]),
+            Keyboard::inlineButton(['text' => '>>', 'callback_data' => encodeCallback(self::$type, 'menu', [$lastPage, $page, $sort, $direction])]),
+        ];
     }
 }
