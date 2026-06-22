@@ -1,0 +1,28 @@
+preset: package
+
+namespace: TelegramBotEssentials\UserManagement
+user-auth-model: Workbench\App\Models\User
+
+paths:
+  src: src
+  resource: resources
+
+factory:
+  path: database/factories
+  namespace: TelegramBotEssentials\UserManagement\Database\Factories
+
+migration:
+  path: database/migrations
+
+model:
+  namespace: TelegramBotEssentials\UserManagement\Models
+
+provider:
+  namespace: TelegramBotEssentials\UserManagement
+
+seeder:
+  path: database/seeders
+  namespace: TelegramBotEssentials\UserManagement\Database\Seeders
+
+testing:
+  namespace: TelegramBotEssentials\UserManagement\Tests
