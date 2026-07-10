@@ -107,4 +107,43 @@ class BotUsersQuery extends CallbackQuery
 
         BotUsersFeature::show($botUser, $lastPage, $sort, $direction)->update();
     }
+
+    public function userActionsHistory(BotUser $botUser, int $page = 1, int $currentPage = 0, int $lastPage = 1, ?string $sort = null, ?string $direction = null): void
+    {
+        BotUsersFeature::userActionsHistory($botUser, $page, $currentPage, $lastPage, $sort, $direction)->update();
+    }
+
+    /**
+     * @throws InvalidPageNumber
+     * @throws TelegramSDKException
+     */
+    public function actionsPage(int $page, int $currentPage, BotUser $botUser, int $lastPage = 1, ?string $sort = null, ?string $direction = null): void
+    {
+        BotUsersFeature::userActionsHistory($botUser, $page, $currentPage, $lastPage, $sort, $direction)->update();
+    }
+
+    /**
+     * @throws LogicException
+     * @throws BindingResolutionException
+     * @throws TelegramSDKException
+     */
+    public function actionsSetPage(BotUser $botUser, int $lastPage = 1, ?string $sort = null, ?string $direction = null): void
+    {
+        $sort = botUserSorts()->resolve($sort);
+        $direction = botUserSorts()->resolveDirection($direction);
+        $messageMeta = MessageMeta::makeWithCurrentMessage();
+        $messageMeta->lockAction(__('tbe-user-management::bot_users.main.text.user_actions_history_waiting_page'));
+        wHook()->user()->changeState(encodeAnswerState($this->type, 'actionsSetPage', [
+            'message_meta_id' => $messageMeta->id,
+            'bot_user_id' => $botUser->id,
+            'last_page' => $lastPage,
+            'sort' => $sort,
+            'direction' => $direction,
+        ]));
+        wHook()->api()->sendMessage([
+            'chat_id' => wHook()->user()->telegramUser->peer_id,
+            'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_enter_page'),
+            'reply_markup' => wHook()->user()->getKeyboard(),
+        ]);
+    }
 }

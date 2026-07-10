@@ -8,6 +8,7 @@ use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Services\TelegramPaginator;
 use TelegramBotEssentials\Essence\Telegram\TelegramResponse;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
+use TelegramBotEssentials\UserManagement\Models\BotUserAction;
 
 class BotUsersFeature
 {
@@ -150,8 +151,99 @@ class BotUsersFeature
 
         $replyMarkup->row([
             Keyboard::inlineButton([
+                'text' => __('tbe-user-management::bot_users.main.keys.userActionsHistory'),
+                'callback_data' => encodeCallback(self::$type, 'userActionsHistory', [$botUser->id, 1, 0, $lastPage, $sort, $direction]),
+            ]),
+        ]);
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
                 'text' => __('tbe::general.keys.back'),
                 'callback_data' => encodeCallback(self::$type, 'menu', [$lastPage, 0, $sort, $direction]),
+            ]),
+        ]);
+
+        return new TelegramResponse(
+            text: $text,
+            replyMarkup: $replyMarkup,
+            parseMode: 'HTML'
+        );
+    }
+
+    /**
+     * @throws InvalidPageNumber
+     */
+    static function userActionsHistory(BotUser $user, int $page = 1, int $currentPage = 0, int $lastPage = 1, ?string $sort = null, ?string $direction = null): TelegramResponse
+    {
+        $sort = botUserSorts()->resolve($sort);
+        $direction = botUserSorts()->resolveDirection($direction);
+        $userName = htmlspecialchars(
+            $user->telegramUser->username
+                ? '@'.$user->telegramUser->username
+                : ($user->telegramUser->full_name ?: '?'),
+            ENT_QUOTES,
+            'UTF-8',
+        );
+
+        $replyMarkup = Keyboard::make()->inline();
+
+        $botUserActions = BotUserAction::query()
+            ->where('bot_user_id', $user->id)
+            ->latest()
+            ->paginate(10, page: $page);
+
+        TelegramPaginator::validatePageNumber($page, $currentPage, $botUserActions);
+
+        if ($botUserActions->isEmpty()) {
+            $text = __('tbe-user-management::bot_users.main.text.user_actions_history_empty', [
+                'userName' => $userName,
+            ]);
+        } else {
+            $text = __('tbe-user-management::bot_users.main.text.user_actions_history_header', [
+                'userName' => $userName,
+                'page' => $page,
+                'totalPages' => $botUserActions->lastPage(),
+            ])."\r\n\r\n";
+
+            $botUserActions
+                ->getCollection()
+                ->groupBy(fn (BotUserAction $botUserAction) => $botUserAction->created_at->format('Y-m-d'))
+                ->each(function ($actions, string $date) use (&$text) {
+                    $text .= "\u{200E}".__('tbe-user-management::bot_users.main.text.user_actions_history_date', [
+                        'date' => $date,
+                    ])."\r\n";
+
+                    $actions->each(function (BotUserAction $botUserAction) use (&$text) {
+                        $userStateText = $botUserAction->state
+                            ? ' | <u>'.htmlspecialchars($botUserAction->state, ENT_QUOTES, 'UTF-8').'</u>'
+                            : '';
+                        $action = htmlspecialchars($botUserAction->action, ENT_QUOTES, 'UTF-8');
+                        $text .= "\u{200E}<i>[{$botUserAction->created_at->format('H:i:s')} | {$botUserAction->update_type}{$userStateText}]</i>:\r\n{$action}\r\n";
+                    });
+
+                    $text .= "\r\n";
+                });
+        }
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
+                'text' => __('tbe-user-management::bot_users.main.keys.userUpdateData'),
+                'callback_data' => encodeCallback(self::$type, 'userActionsHistory', [$user->id, 1, 0, $lastPage, $sort, $direction]),
+            ]),
+        ]);
+        $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(
+            self::$type,
+            $page,
+            max(1, $botUserActions->lastPage()),
+            'actionsPage',
+            customPageMethod: 'actionsSetPage',
+            extraParams: [$user->id, $lastPage, $sort, $direction],
+        ));
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
+                'text' => __('tbe::general.keys.back'),
+                'callback_data' => encodeCallback(self::$type, 'show', [$user->id, $lastPage, $sort, $direction]),
             ]),
         ]);
 

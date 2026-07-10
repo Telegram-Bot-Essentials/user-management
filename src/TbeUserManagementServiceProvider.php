@@ -7,7 +7,9 @@ use Illuminate\Support\ServiceProvider;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
+use TelegramBotEssentials\UserManagement\Providers\EventServiceProvider;
 use TelegramBotEssentials\UserManagement\Services\BotUserSorts;
+use TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin\BotUserActionsQuery;
 use TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin\BotUsersQuery;
 use TelegramBotEssentials\UserManagement\Telegram\StateAnswers\Admin\BotUsersAnswer;
 
@@ -28,9 +30,13 @@ class TbeUserManagementServiceProvider extends ServiceProvider
         $this->registerPublishing();
 
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'tbe-user-management');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        $this->app->register(EventServiceProvider::class);
 
         callbackQueryBus()->addCallbackQueries([
             BotUsersQuery::class,
+//            BotUserActionsQuery::class,
         ]);
 
         stateAnswerBus()->addStateAnswers([

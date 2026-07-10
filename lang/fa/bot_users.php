@@ -23,6 +23,12 @@ return [
                 ."آخرین تعامل: :userUpdatedAt\r\n"
                 ."\r\n"
                 .'⚠️ این اطلاعات در تاریخ :dataReceiveTime دریافت شده است',
+            'user_actions_history_header' => "📜 تاریخچه اقدامات\r\n:userName\r\nصفحه :page/:totalPages",
+            'user_actions_history_empty' => "📜 تاریخچه اقدامات\r\n:userName\r\n\r\nهنوز هیچ اقدامی برای این کاربر ثبت نشده است.",
+            'user_actions_history_date' => '───── :date ─────',
+            'user_actions_history_enter_page' => 'شماره صفحه را وارد کنید:',
+            'user_actions_history_page_loaded' => 'صفحه :page بارگذاری شد.',
+            'user_actions_history_waiting_page' => 'در انتظار شماره صفحه...',
         ],
         'answers' => [
         ],
@@ -36,6 +42,7 @@ return [
             'userUpdateData' => '♻️ بروزرسانی',
             'setUserBalance' => '💵 تنظیم اعتبار',
             'addUserBalance' => '💸 افزایش اعتبار',
+            'userActionsHistory' => '📜 تاریخچه اقدامات',
         ],
     ],
     'reply_key' => 'کاربران ربات 👥',

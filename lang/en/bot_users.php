@@ -23,6 +23,12 @@ return [
                 ."Last Interaction: :userUpdatedAt\r\n"
                 ."\r\n"
                 .'⚠️ This data received at: :dataReceiveTime',
+            'user_actions_history_header' => "📜 Action history\r\n:userName\r\nPage :page/:totalPages",
+            'user_actions_history_empty' => "📜 Action history\r\n:userName\r\n\r\nNo actions recorded for this user yet.",
+            'user_actions_history_date' => '───── :date ─────',
+            'user_actions_history_enter_page' => 'Enter the page number:',
+            'user_actions_history_page_loaded' => 'Page :page loaded.',
+            'user_actions_history_waiting_page' => 'Waiting for page number...',
         ],
         'answers' => [
         ],
@@ -36,6 +42,7 @@ return [
             'userUpdateData' => '♻️ Update',
             'setUserBalance' => '💵 Set Balance',
             'addUserBalance' => '💸 Add Balance',
+            'userActionsHistory' => '📜 Action history',
         ],
     ],
     'reply_key' => 'Bot Users 👥',
