@@ -72,7 +72,7 @@ class BotUsersFeature
             ]);
         });
 
-        $replyMarkup->row(self::makeNavigationButtonsRow($page, $users->lastPage(), $sort, $direction));
+        $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(self::$type, $page, $users->lastPage(),'menu', extraParams: [$sort, $direction]));
 
         return new TelegramResponse(
             text: $text,
@@ -160,16 +160,5 @@ class BotUsersFeature
             replyMarkup: $replyMarkup,
             parseMode: 'HTML'
         );
-    }
-
-    private static function makeNavigationButtonsRow(int $page, int $lastPage, string $sort, string $direction): array
-    {
-        return [
-            Keyboard::inlineButton(['text' => '<<', 'callback_data' => encodeCallback(self::$type, 'menu', [1, $page, $sort, $direction])]),
-            Keyboard::inlineButton(['text' => '<', 'callback_data' => encodeCallback(self::$type, 'menu', [$page - 1, $page, $sort, $direction])]),
-            Keyboard::inlineButton(['text' => "$page/{$lastPage}", 'callback_data' => encodeCallback(self::$type, 'setMenuPage', [$sort, $direction])]),
-            Keyboard::inlineButton(['text' => '>', 'callback_data' => encodeCallback(self::$type, 'menu', [$page + 1, $page, $sort, $direction])]),
-            Keyboard::inlineButton(['text' => '>>', 'callback_data' => encodeCallback(self::$type, 'menu', [$lastPage, $page, $sort, $direction])]),
-        ];
     }
 }
