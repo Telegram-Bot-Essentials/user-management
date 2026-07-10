@@ -44,6 +44,13 @@ class BotUsersFeature
 
         $replyMarkup->row([
             Keyboard::inlineButton([
+                'text' => __('tbe-user-management::bot_users.main.keys.allActionsHistory'),
+                'callback_data' => encodeCallback(self::$type, 'allActionsHistory', [1, 0, $page, $sort, $direction]),
+            ]),
+        ]);
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.user_column_header'),
                 'callback_data' => encodeCallback(self::$type, 'menu', [$page, 0, $sort, $direction]),
             ]),
@@ -205,24 +212,7 @@ class BotUsersFeature
                 'totalPages' => $botUserActions->lastPage(),
             ])."\r\n\r\n";
 
-            $botUserActions
-                ->getCollection()
-                ->groupBy(fn (BotUserAction $botUserAction) => $botUserAction->created_at->format('Y-m-d'))
-                ->each(function ($actions, string $date) use (&$text) {
-                    $text .= "\u{200E}".__('tbe-user-management::bot_users.main.text.user_actions_history_date', [
-                        'date' => $date,
-                    ])."\r\n";
-
-                    $actions->each(function (BotUserAction $botUserAction) use (&$text) {
-                        $userStateText = $botUserAction->state
-                            ? ' | <u>'.htmlspecialchars($botUserAction->state, ENT_QUOTES, 'UTF-8').'</u>'
-                            : '';
-                        $action = htmlspecialchars($botUserAction->action, ENT_QUOTES, 'UTF-8');
-                        $text .= "\u{200E}<i>[{$botUserAction->created_at->format('H:i:s')} | {$botUserAction->update_type}{$userStateText}]</i>:\r\n{$action}\r\n";
-                    });
-
-                    $text .= "\r\n";
-                });
+            $text .= self::formatGroupedActions($botUserActions->getCollection());
         }
 
         $replyMarkup->row([
@@ -252,5 +242,104 @@ class BotUsersFeature
             replyMarkup: $replyMarkup,
             parseMode: 'HTML'
         );
+    }
+
+    /**
+     * @throws InvalidPageNumber
+     */
+    public static function allActionsHistory(int $page = 1, int $currentPage = 0, int $lastPage = 1, ?string $sort = null, ?string $direction = null): TelegramResponse
+    {
+        $sort = botUserSorts()->resolve($sort);
+        $direction = botUserSorts()->resolveDirection($direction);
+        $replyMarkup = Keyboard::make()->inline();
+
+        $botUserActions = BotUserAction::query()
+            ->with('botUser.telegramUser')
+            ->latest()
+            ->paginate(10, page: $page);
+
+        TelegramPaginator::validatePageNumber($page, $currentPage, $botUserActions);
+
+        if ($botUserActions->isEmpty()) {
+            $text = __('tbe-user-management::bot_users.main.text.all_actions_history_empty');
+        } else {
+            $text = __('tbe-user-management::bot_users.main.text.all_actions_history_header', [
+                'page' => $page,
+                'totalPages' => $botUserActions->lastPage(),
+            ])."\r\n\r\n";
+
+            $text .= self::formatGroupedActions($botUserActions->getCollection(), includeUser: true);
+        }
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
+                'text' => __('tbe-user-management::bot_users.main.keys.userUpdateData'),
+                'callback_data' => encodeCallback(self::$type, 'allActionsHistory', [1, 0, $lastPage, $sort, $direction]),
+            ]),
+        ]);
+        $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(
+            self::$type,
+            $page,
+            max(1, $botUserActions->lastPage()),
+            'allActionsPage',
+            customPageMethod: 'allActionsSetPage',
+            extraParams: [$lastPage, $sort, $direction],
+        ));
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
+                'text' => __('tbe::general.keys.back'),
+                'callback_data' => encodeCallback(self::$type, 'menu', [$lastPage, 0, $sort, $direction]),
+            ]),
+        ]);
+
+        return new TelegramResponse(
+            text: $text,
+            replyMarkup: $replyMarkup,
+            parseMode: 'HTML'
+        );
+    }
+
+    private static function formatGroupedActions($actions, bool $includeUser = false): string
+    {
+        $text = '';
+
+        $actions
+            ->groupBy(fn (BotUserAction $botUserAction) => $botUserAction->created_at->format('Y-m-d'))
+            ->each(function ($groupedActions, string $date) use (&$text, $includeUser) {
+                $text .= "\u{200E}".__('tbe-user-management::bot_users.main.text.user_actions_history_date', [
+                    'date' => $date,
+                ])."\r\n";
+
+                $groupedActions->each(function (BotUserAction $botUserAction) use (&$text, $includeUser) {
+                    $text .= self::formatActionLine($botUserAction, $includeUser);
+                });
+
+                $text .= "\r\n";
+            });
+
+        return $text;
+    }
+
+    private static function formatActionLine(BotUserAction $botUserAction, bool $includeUser = false): string
+    {
+        $userStateText = $botUserAction->state
+            ? ' | <u>'.htmlspecialchars($botUserAction->state, ENT_QUOTES, 'UTF-8').'</u>'
+            : '';
+        $action = htmlspecialchars($botUserAction->action, ENT_QUOTES, 'UTF-8');
+        $userPrefix = '';
+
+        if ($includeUser) {
+            $userName = htmlspecialchars(
+                $botUserAction->botUser->telegramUser->username
+                    ? '@'.$botUserAction->botUser->telegramUser->username
+                    : ($botUserAction->botUser->telegramUser->full_name ?: '?'),
+                ENT_QUOTES,
+                'UTF-8',
+            );
+            $userPrefix = " | {$userName}";
+        }
+
+        return "\u{200E}<i>[{$botUserAction->created_at->format('H:i:s')}{$userPrefix} | {$botUserAction->update_type}{$userStateText}]</i>:\r\n{$action}\r\n";
     }
 }

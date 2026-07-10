@@ -29,6 +29,8 @@ return [
             'user_actions_history_enter_page' => 'Enter the page number:',
             'user_actions_history_page_loaded' => 'Page :page loaded.',
             'user_actions_history_waiting_page' => 'Waiting for page number...',
+            'all_actions_history_header' => "📜 Bot action history\r\nPage :page/:totalPages",
+            'all_actions_history_empty' => "📜 Bot action history\r\n\r\nNo actions recorded yet.",
         ],
         'answers' => [
         ],
@@ -43,6 +45,7 @@ return [
             'setUserBalance' => '💵 Set Balance',
             'addUserBalance' => '💸 Add Balance',
             'userActionsHistory' => '📜 Action history',
+            'allActionsHistory' => '📜 All actions history',
         ],
     ],
     'reply_key' => 'Bot Users 👥',

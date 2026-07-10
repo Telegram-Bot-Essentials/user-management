@@ -86,4 +86,35 @@ class BotUsersAnswer extends StateAnswer
 
         $this->messageMeta()->updateAndContinueAction($data);
     }
+
+    /**
+     * @throws LogicException
+     * @throws TelegramSDKException
+     * @throws BindingResolutionException
+     * @throws InvalidPageNumber
+     */
+    public function allActionsSetPage(int $last_page = 1, ?string $sort = null, ?string $direction = null): void
+    {
+        $page = wHook()->update()->message->text;
+        $sort = botUserSorts()->resolve($sort);
+        $direction = botUserSorts()->resolveDirection($direction);
+        $lastPage = BotUserAction::query()
+            ->paginate(perPage: 10)
+            ->lastPage();
+
+        TelegramPaginator::validatePageInput($page, $lastPage);
+
+        $data = BotUsersFeature::allActionsHistory(intval($page), lastPage: $last_page, sort: $sort, direction: $direction);
+
+        wHook()->user()->changeState();
+        wHook()->api()->sendMessage([
+            'chat_id' => wHook()->user()->telegramUser->peer_id,
+            'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_page_loaded', [
+                'page' => $page,
+            ]),
+            'reply_markup' => wHook()->user()->getKeyboard(),
+        ]);
+
+        $this->messageMeta()->updateAndContinueAction($data);
+    }
 }

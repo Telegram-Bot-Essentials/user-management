@@ -29,6 +29,8 @@ return [
             'user_actions_history_enter_page' => 'شماره صفحه را وارد کنید:',
             'user_actions_history_page_loaded' => 'صفحه :page بارگذاری شد.',
             'user_actions_history_waiting_page' => 'در انتظار شماره صفحه...',
+            'all_actions_history_header' => "📜 تاریخچه اقدامات ربات\r\nصفحه :page/:totalPages",
+            'all_actions_history_empty' => "📜 تاریخچه اقدامات ربات\r\n\r\nهنوز هیچ اقدامی ثبت نشده است.",
         ],
         'answers' => [
         ],
@@ -43,6 +45,7 @@ return [
             'setUserBalance' => '💵 تنظیم اعتبار',
             'addUserBalance' => '💸 افزایش اعتبار',
             'userActionsHistory' => '📜 تاریخچه اقدامات',
+            'allActionsHistory' => '📜 تاریخچه همه اقدامات',
         ],
     ],
     'reply_key' => 'کاربران ربات 👥',
