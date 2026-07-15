@@ -39,6 +39,10 @@ class LogBotInteractions
             $userState = $decodedAnswerState['type'] . '->' . $decodedAnswerState['method'];
         }
 
+        if (BotUserAction::isHistoryNavigation($userState)) {
+            return;
+        }
+
         BotUserAction::create([
             'bot_user_id' => wHook()->user()->id,
             'update_type' => $this->event->updateType,
@@ -50,10 +54,16 @@ class LogBotInteractions
     private function processCallbackQueryUpdate()
     {
         $cbData = decodeCallback(wHook()->update()->callbackQuery->data);
+        $userState = $cbData['type'].'->'.$cbData['method'];
+
+        if (BotUserAction::isHistoryNavigation($userState)) {
+            return;
+        }
+
         BotUserAction::create([
             'bot_user_id' => wHook()->user()->id,
             'update_type' => $this->event->updateType,
-            'state' => $cbData['type'].'->'.$cbData['method'],
+            'state' => $userState,
             'action' => getInputInlineKeyText(),
         ]);
     }
