@@ -80,7 +80,7 @@ class BotUsersFeature
             ]);
         });
 
-        $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(self::$type, $page, $users->lastPage(),'menu', extraParams: [$sort, $direction]));
+        $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(self::$type, $page, $users->lastPage(), 'menu', customPageMethod: 'setMenuPage', extraParams: [$sort, $direction]));
 
         return new TelegramResponse(
             text: $text,
