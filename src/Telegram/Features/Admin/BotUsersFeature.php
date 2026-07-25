@@ -41,7 +41,7 @@ class BotUsersFeature
                 'text' => __('tbe-user-management::bot_users.main.keys.sort', [
                     'sort' => botUserSorts()->getSort($sort)->label,
                 ]),
-                'callback_data' => encodeCallback(self::$type, 'sortMenu', [$page, $sort, $direction]),
+                'callback_data' => encodeCallback(self::$type, 'sortMenu'),
             ]),
         ]);
 
@@ -59,12 +59,12 @@ class BotUsersFeature
             ]),
             Keyboard::inlineButton([
                 'text' => botUserSorts()->getSort($sort)->label.' '.botUserSorts()->directionIndicator($direction),
-                'callback_data' => encodeCallback(self::$type, 'toggleDirection', [$sort, $direction, $page]),
+                'callback_data' => encodeCallback(self::$type, 'toggleDirection'),
             ]),
         ]);
 
         $users->each(function (BotUser $user) use ($replyMarkup, $page, $sort, $direction) {
-            $callback = encodeCallback(self::$type, 'show', [$user->id, $page, $sort, $direction]);
+            $callback = encodeCallback(self::$type, 'show', [$user->id]);
             if ($user->telegramUser->username) {
                 $name = '@'.$user->telegramUser->username;
             } else {
@@ -85,17 +85,26 @@ class BotUsersFeature
 
         $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(self::$type, $page, $users->lastPage(), 'menu', customPageMethod: 'setMenuPage', extraParams: [$sort, $direction]));
 
-        return new TelegramResponse(
+        return (new TelegramResponse(
             text: $text,
             replyMarkup: $replyMarkup
-        );
+        ))->navState([
+            'sort' => $sort,
+            'direction' => $direction,
+            'lastPage' => $page,
+        ]);
     }
 
-    public static function sortMenu(int $lastPage, string $currentSort, string $direction): TelegramResponse
+    public static function sortMenu(): TelegramResponse
     {
+        $navState = navState()->getForCurrentMessage(self::NAV_STATE_DEFAULTS);
+        $currentSort = botUserSorts()->resolve($navState['sort']);
+        $direction = botUserSorts()->resolveDirection($navState['direction']);
+        $lastPage = $navState['lastPage'];
+
         $replyMarkup = Keyboard::make()->inline();
 
-        botUserSorts()->getSorts()->each(function (BotUserSort $sort) use ($replyMarkup, $lastPage, $currentSort, $direction) {
+        botUserSorts()->getSorts()->each(function (BotUserSort $sort) use ($replyMarkup, $currentSort, $direction) {
             $replyMarkup->row([
                 Keyboard::inlineButton([
                     'text' => ($sort->key === $currentSort ? '✅ ' : '').$sort->label,
@@ -117,10 +126,12 @@ class BotUsersFeature
         );
     }
 
-    public static function show(BotUser $botUser, int $lastPage = 1, ?string $sort = null, ?string $direction = null): TelegramResponse
+    public static function show(BotUser $botUser): TelegramResponse
     {
-        $sort = botUserSorts()->resolve($sort);
-        $direction = botUserSorts()->resolveDirection($direction);
+        $navState = navState()->getForCurrentMessage(self::NAV_STATE_DEFAULTS);
+        $sort = botUserSorts()->resolve($navState['sort']);
+        $direction = botUserSorts()->resolveDirection($navState['direction']);
+        $lastPage = $navState['lastPage'];
 
         $text = __('tbe-user-management::bot_users.main.text.show_user', [
             'userFullName' => "<a href=\"tg://user?id={$botUser->telegramUser->peer_id}\">{$botUser->telegramUser->full_name}</a>",
@@ -144,25 +155,25 @@ class BotUsersFeature
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => $botUser->suspend ? __('tbe-user-management::bot_users.main.keys.userIsSuspended') : __('tbe-user-management::bot_users.main.keys.userIsActive'),
-                'callback_data' => encodeCallback(self::$type, 'suspend', [$botUser->id, intval(! $botUser->suspend), $lastPage, $sort, $direction]),
+                'callback_data' => encodeCallback(self::$type, 'suspend', [$botUser->id, intval(! $botUser->suspend)]),
             ]),
         ]);
 
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.userRole', ['role' => $botUser->role]),
-                'callback_data' => encodeCallback(self::$type, 'role', [$botUser->id, $lastPage, $sort, $direction]),
+                'callback_data' => encodeCallback(self::$type, 'role', [$botUser->id]),
             ]),
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.userUpdateData'),
-                'callback_data' => encodeCallback(self::$type, 'show', [$botUser->id, $lastPage, $sort, $direction]),
+                'callback_data' => encodeCallback(self::$type, 'show', [$botUser->id]),
             ]),
         ]);
 
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.userActionsHistory'),
-                'callback_data' => encodeCallback(self::$type, 'userActionsHistory', [$botUser->id, 1, 0, $lastPage, $sort, $direction]),
+                'callback_data' => encodeCallback(self::$type, 'userActionsHistory', [$botUser->id, 1, 0]),
             ]),
         ]);
 
@@ -215,10 +226,8 @@ class BotUsersFeature
     /**
      * @throws InvalidPageNumber
      */
-    static function userActionsHistory(BotUser $user, int $page = 1, int $currentPage = 0, int $lastPage = 1, ?string $sort = null, ?string $direction = null): TelegramResponse
+    static function userActionsHistory(BotUser $user, int $page = 1, int $currentPage = 0): TelegramResponse
     {
-        $sort = botUserSorts()->resolve($sort);
-        $direction = botUserSorts()->resolveDirection($direction);
         $userName = htmlspecialchars(
             $user->telegramUser->username
                 ? '@'.$user->telegramUser->username
@@ -253,7 +262,7 @@ class BotUsersFeature
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.userUpdateData'),
-                'callback_data' => encodeCallback(self::$type, 'userActionsHistory', [$user->id, 1, 0, $lastPage, $sort, $direction]),
+                'callback_data' => encodeCallback(self::$type, 'userActionsHistory', [$user->id, 1, 0]),
             ]),
         ]);
         $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(
@@ -262,13 +271,13 @@ class BotUsersFeature
             max(1, $botUserActions->lastPage()),
             'actionsPage',
             customPageMethod: 'actionsSetPage',
-            extraParams: [$user->id, $lastPage, $sort, $direction],
+            extraParams: [$user->id],
         ));
 
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe::general.keys.back'),
-                'callback_data' => encodeCallback(self::$type, 'show', [$user->id, $lastPage, $sort, $direction]),
+                'callback_data' => encodeCallback(self::$type, 'show', [$user->id]),
             ]),
         ]);
 

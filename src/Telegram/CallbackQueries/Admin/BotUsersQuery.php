@@ -30,29 +30,31 @@ class BotUsersQuery extends CallbackQuery
     /**
      * @throws TelegramSDKException
      */
-    public function sortMenu(int $lastPage = 1, string $currentSort = 'last_interaction', ?string $direction = null): void
+    public function sortMenu(): void
     {
-        BotUsersFeature::sortMenu($lastPage, botUserSorts()->resolve($currentSort), botUserSorts()->resolveDirection($direction))->update();
+        BotUsersFeature::sortMenu()->update();
     }
 
     /**
      * @throws InvalidPageNumber
      * @throws TelegramSDKException
      */
-    public function sort(string $currentSort = 'last_interaction', ?string $direction = null): void
+    public function sort(): void
     {
-        $nextSort = botUserSorts()->next($currentSort);
-        BotUsersFeature::menu(1, 0, $nextSort, $direction)->update();
+        $navState = navState()->getForCurrentMessage(BotUsersFeature::NAV_STATE_DEFAULTS);
+        $nextSort = botUserSorts()->next(botUserSorts()->resolve($navState['sort']));
+        BotUsersFeature::menu(1, 0, $nextSort, $navState['direction'])->update();
     }
 
     /**
      * @throws InvalidPageNumber
      * @throws TelegramSDKException
      */
-    public function toggleDirection(string $sort, ?string $direction = null, int $page = 1): void
+    public function toggleDirection(): void
     {
-        $nextDirection = botUserSorts()->toggleDirection($direction ?? 'desc');
-        BotUsersFeature::menu($page, 0, $sort, $nextDirection)->update();
+        $navState = navState()->getForCurrentMessage(BotUsersFeature::NAV_STATE_DEFAULTS);
+        $nextDirection = botUserSorts()->toggleDirection($navState['direction'] ?? 'desc');
+        BotUsersFeature::menu($navState['lastPage'], 0, $navState['sort'], $nextDirection)->update();
     }
 
     /**
@@ -79,47 +81,47 @@ class BotUsersQuery extends CallbackQuery
     /**
      * @throws TelegramSDKException
      */
-    public function show(BotUser $botUser, int $lastPage = 1, ?string $sort = null, ?string $direction = null): void
+    public function show(BotUser $botUser): void
     {
-        BotUsersFeature::show($botUser, $lastPage, $sort, $direction)->update();
+        BotUsersFeature::show($botUser)->update();
     }
 
     /**
      * @throws TelegramSDKException
      */
-    public function role(BotUser $botUser, int $lastPage = 1, ?string $sort = null, ?string $direction = null): void
+    public function role(BotUser $botUser): void
     {
         $roles = array_map(fn ($role) => $role->value, Roles::cases());
         $next = nextInArray($roles, $botUser->power);
         $botUser->power = $next ?? 0;
         $botUser->save();
 
-        BotUsersFeature::show($botUser, $lastPage, $sort, $direction)->update();
+        BotUsersFeature::show($botUser)->update();
     }
 
     /**
      * @throws TelegramSDKException
      */
-    public function suspend(BotUser $botUser, bool $suspend, int $lastPage = 1, ?string $sort = null, ?string $direction = null): void
+    public function suspend(BotUser $botUser, bool $suspend): void
     {
         $botUser->suspend = $suspend;
         $botUser->save();
 
-        BotUsersFeature::show($botUser, $lastPage, $sort, $direction)->update();
+        BotUsersFeature::show($botUser)->update();
     }
 
-    public function userActionsHistory(BotUser $botUser, int $page = 1, int $currentPage = 0, int $lastPage = 1, ?string $sort = null, ?string $direction = null): void
+    public function userActionsHistory(BotUser $botUser, int $page = 1, int $currentPage = 0): void
     {
-        BotUsersFeature::userActionsHistory($botUser, $page, $currentPage, $lastPage, $sort, $direction)->update();
+        BotUsersFeature::userActionsHistory($botUser, $page, $currentPage)->update();
     }
 
     /**
      * @throws InvalidPageNumber
      * @throws TelegramSDKException
      */
-    public function actionsPage(int $page, int $currentPage, BotUser $botUser, int $lastPage = 1, ?string $sort = null, ?string $direction = null): void
+    public function actionsPage(int $page, int $currentPage, BotUser $botUser): void
     {
-        BotUsersFeature::userActionsHistory($botUser, $page, $currentPage, $lastPage, $sort, $direction)->update();
+        BotUsersFeature::userActionsHistory($botUser, $page, $currentPage)->update();
     }
 
     /**
@@ -127,18 +129,13 @@ class BotUsersQuery extends CallbackQuery
      * @throws BindingResolutionException
      * @throws TelegramSDKException
      */
-    public function actionsSetPage(BotUser $botUser, int $lastPage = 1, ?string $sort = null, ?string $direction = null): void
+    public function actionsSetPage(BotUser $botUser): void
     {
-        $sort = botUserSorts()->resolve($sort);
-        $direction = botUserSorts()->resolveDirection($direction);
         $messageMeta = MessageMeta::makeWithCurrentMessage();
         $messageMeta->lockAction(__('tbe-user-management::bot_users.main.text.user_actions_history_waiting_page'));
         wHook()->user()->changeState(encodeAnswerState($this->type, 'actionsSetPage', [
             'message_meta_id' => $messageMeta->id,
             'bot_user_id' => $botUser->id,
-            'last_page' => $lastPage,
-            'sort' => $sort,
-            'direction' => $direction,
         ]));
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,

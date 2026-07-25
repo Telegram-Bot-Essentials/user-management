@@ -60,11 +60,9 @@ class BotUsersAnswer extends StateAnswer
      * @throws BindingResolutionException
      * @throws InvalidPageNumber
      */
-    public function actionsSetPage(int $bot_user_id, int $last_page = 1, ?string $sort = null, ?string $direction = null): void
+    public function actionsSetPage(int $bot_user_id): void
     {
         $page = wHook()->update()->message->text;
-        $sort = botUserSorts()->resolve($sort);
-        $direction = botUserSorts()->resolveDirection($direction);
         $lastPage = BotUserAction::query()
             ->where('bot_user_id', $bot_user_id)
             ->paginate(perPage: 10)
@@ -73,7 +71,7 @@ class BotUsersAnswer extends StateAnswer
         TelegramPaginator::validatePageInput($page, $lastPage);
 
         $botUser = BotUser::query()->findOrFail($bot_user_id);
-        $data = BotUsersFeature::userActionsHistory($botUser, intval($page), lastPage: $last_page, sort: $sort, direction: $direction);
+        $data = BotUsersFeature::userActionsHistory($botUser, intval($page));
 
         wHook()->user()->changeState();
         wHook()->api()->sendMessage([
