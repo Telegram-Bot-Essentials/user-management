@@ -8,11 +8,14 @@ use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Services\TelegramPaginator;
 use TelegramBotEssentials\Essence\Telegram\TelegramResponse;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
+use TelegramBotEssentials\UserManagement\Enums\SectionMode;
 use TelegramBotEssentials\UserManagement\Models\BotUserAction;
 
 class BotUsersFeature
 {
     public static string $type = 'BOTUSERS';
+
+    public const NAV_STATE_DEFAULTS = ['sort' => null, 'direction' => null, 'lastPage' => 1];
 
     /**
      * @throws InvalidPageNumber
@@ -163,6 +166,8 @@ class BotUsersFeature
             ]),
         ]);
 
+        $text .= self::renderSections($botUser, $replyMarkup);
+
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe::general.keys.back'),
@@ -175,6 +180,36 @@ class BotUsersFeature
             replyMarkup: $replyMarkup,
             parseMode: 'HTML'
         );
+    }
+
+    private static function renderSections(BotUser $botUser, Keyboard $replyMarkup): string
+    {
+        $extraText = '';
+
+        userManagementSections()->getSectionsFor($botUser)->each(function ($section) use ($botUser, $replyMarkup, &$extraText) {
+            if ($section->mode === SectionMode::BUTTON) {
+                $replyMarkup->row([
+                    Keyboard::inlineButton([
+                        'text' => $section->labelFor($botUser),
+                        'callback_data' => $section->targetFor($botUser),
+                    ]),
+                ]);
+
+                return;
+            }
+
+            $content = $section->contentFor($botUser);
+
+            if (! empty($content['text'])) {
+                $extraText .= "\r\n\r\n".$content['text'];
+            }
+
+            foreach ($content['rows'] ?? [] as $row) {
+                $replyMarkup->row($row);
+            }
+        });
+
+        return $extraText;
     }
 
     /**
