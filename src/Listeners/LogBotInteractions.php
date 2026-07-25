@@ -48,6 +48,8 @@ class LogBotInteractions
             'update_type' => $this->event->updateType,
             'state' => $userState,
             'action' => wHook()->update()->message->text
+                ?? wHook()->update()->message->caption
+                ?? ('[' . $this->event->updateType . ']'),
         ]);
     }
 
