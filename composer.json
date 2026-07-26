@@ -6,7 +6,7 @@
         "php": "^8.2",
         "laravel/framework": "^12",
         "elyar/personal-laravel-helpers": "v0.0.2",
-      "telegram-bot-essentials/essence": "*"
+      "telegram-bot-essentials/essence": "^0.9"
     },
     "license": "MIT",
     "autoload": {
