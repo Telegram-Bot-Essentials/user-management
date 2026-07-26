@@ -93,8 +93,15 @@ class BotUsersQuery extends CallbackQuery
     {
         $roles = array_map(fn ($role) => $role->value, Roles::cases());
         $next = nextInArray($roles, $botUser->power);
+        $previousPower = $botUser->power;
         $botUser->power = $next ?? 0;
         $botUser->save();
+
+        tbeLog('user-management')->info('User role changed', [
+            'target_bot_user_id' => $botUser->getKey(),
+            'previous_power' => $previousPower,
+            'new_power' => $botUser->power,
+        ]);
 
         BotUsersFeature::show($botUser)->update();
     }
@@ -106,6 +113,10 @@ class BotUsersQuery extends CallbackQuery
     {
         $botUser->suspend = $suspend;
         $botUser->save();
+
+        tbeLog('user-management')->info($suspend ? 'User suspended' : 'User unsuspended', [
+            'target_bot_user_id' => $botUser->getKey(),
+        ]);
 
         BotUsersFeature::show($botUser)->update();
     }
