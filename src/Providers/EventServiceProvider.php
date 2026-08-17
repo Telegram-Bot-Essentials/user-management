@@ -10,7 +10,9 @@ use TelegramBotEssentials\Essence\Events\BotInlineQueryHandled;
 use TelegramBotEssentials\Essence\Events\BotReplyKeyHandled;
 use TelegramBotEssentials\Essence\Events\BotStateAnswerHandled;
 use TelegramBotEssentials\Essence\Events\BotUpdateReceived;
+use TelegramBotEssentials\Essence\Events\BotUserStatusChanged;
 use TelegramBotEssentials\UserManagement\Listeners\LogBotInteractions;
+use TelegramBotEssentials\UserManagement\Listeners\LogBotUserStatusChanges;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,5 +24,6 @@ class EventServiceProvider extends ServiceProvider
 //        BotInlineQueryHandled::class => [LogBotInteractions::class],
 //        BotDeepLinkReceived::class => [LogBotInteractions::class],
         BotUpdateReceived::class => [LogBotInteractions::class],
+        BotUserStatusChanged::class => [LogBotUserStatusChanges::class],
     ];
 }

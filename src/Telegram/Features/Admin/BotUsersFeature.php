@@ -7,6 +7,7 @@ use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Services\TelegramPaginator;
 use TelegramBotEssentials\Essence\Telegram\TelegramResponse;
+use TelegramBotEssentials\UserManagement\DTOs\BotUserFilter;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
 use TelegramBotEssentials\UserManagement\Enums\SectionMode;
 use TelegramBotEssentials\UserManagement\Models\BotUserAction;
@@ -15,22 +16,30 @@ class BotUsersFeature
 {
     public static string $type = 'BOTUSERS';
 
-    public const NAV_STATE_DEFAULTS = ['sort' => null, 'direction' => null, 'lastPage' => 1];
+    public const NAV_STATE_DEFAULTS = ['sort' => null, 'direction' => null, 'filter' => null, 'lastPage' => 1];
 
     /**
+     * @param string|null $filter overrides the filter held in nav state, which
+     *                            is how choosing one from the filter menu takes
+     *                            effect. Passed in code rather than through
+     *                            callback_data, which has no room left.
+     *
      * @throws InvalidPageNumber
      */
-    public static function menu(int $page = 1, int $currentPage = 0, ?string $sort = null, ?string $direction = null): TelegramResponse
+    public static function menu(int $page = 1, int $currentPage = 0, ?string $sort = null, ?string $direction = null, ?string $filter = null): TelegramResponse
     {
         $sort = botUserSorts()->resolve($sort);
         $direction = botUserSorts()->resolveDirection($direction);
+        $filter = botUserFilters()->resolve(
+            $filter ?? navState()->getForCurrentMessage(self::NAV_STATE_DEFAULTS)['filter']
+        );
 
         $text = __('tbe-user-management::bot_users.main.text.index', [
             'userCount' => BotUser::count(),
             'usersJoinedLastDay' => BotUser::where('created_at', '>', now()->subDays(1))->count(),
         ]);
         $users = botUserSorts()
-            ->apply($sort, BotUser::query()->with('telegramUser'), $direction)
+            ->apply($sort, botUserFilters()->apply($filter, BotUser::query()->with('telegramUser')), $direction)
             ->paginate(perPage: 10, page: $page);
         TelegramPaginator::validatePageNumber($page, $currentPage, $users);
 
@@ -42,6 +51,12 @@ class BotUsersFeature
                     'sort' => botUserSorts()->getSort($sort)->label,
                 ]),
                 'callback_data' => encodeCallback(self::$type, 'sortMenu'),
+            ]),
+            Keyboard::inlineButton([
+                'text' => __('tbe-user-management::bot_users.main.keys.filter', [
+                    'filter' => botUserFilters()->getFilter($filter)?->label ?? '?',
+                ]),
+                'callback_data' => encodeCallback(self::$type, 'filterMenu'),
             ]),
         ]);
 
@@ -73,7 +88,7 @@ class BotUsersFeature
             }
             $replyMarkup->row([
                 Keyboard::inlineButton([
-                    'text' => mb_trim(($user->suspend ? __('tbe::general.status.disabledEmoji') : '').' '.$name),
+                    'text' => mb_trim(self::reachabilityEmoji($user).($user->suspend ? __('tbe::general.status.disabledEmoji') : '').' '.$name),
                     'callback_data' => $callback,
                 ]),
                 Keyboard::inlineButton([
@@ -91,8 +106,60 @@ class BotUsersFeature
         ))->navState([
             'sort' => $sort,
             'direction' => $direction,
+            'filter' => $filter,
             'lastPage' => $page,
         ]);
+    }
+
+    /**
+     * Marks only users we cannot reach, so the ordinary case stays unadorned
+     * and a dead user is spottable while browsing with no filter applied.
+     */
+    public static function reachabilityEmoji(BotUser $botUser): string
+    {
+        return match ($botUser->reachability()) {
+            BotUser::STATUS_BLOCKED => '🚫',
+            BotUser::STATUS_UNREACHABLE => '❓',
+            BotUser::STATUS_DEACTIVATED => '⚰️',
+            default => '',
+        };
+    }
+
+    public static function reachabilityLabel(BotUser $botUser): string
+    {
+        return __('tbe-user-management::bot_users.reachability.'.$botUser->reachability());
+    }
+
+    public static function filterMenu(): TelegramResponse
+    {
+        $navState = navState()->getForCurrentMessage(self::NAV_STATE_DEFAULTS);
+        $currentFilter = botUserFilters()->resolve($navState['filter']);
+        $sort = botUserSorts()->resolve($navState['sort']);
+        $direction = botUserSorts()->resolveDirection($navState['direction']);
+        $lastPage = $navState['lastPage'];
+
+        $replyMarkup = Keyboard::make()->inline();
+
+        botUserFilters()->getFilters()->each(function (BotUserFilter $filter) use ($replyMarkup, $currentFilter) {
+            $replyMarkup->row([
+                Keyboard::inlineButton([
+                    'text' => ($filter->key === $currentFilter ? '✅ ' : '').$filter->label,
+                    'callback_data' => encodeCallback(self::$type, 'filter', [$filter->key]),
+                ]),
+            ]);
+        });
+
+        $replyMarkup->row([
+            Keyboard::inlineButton([
+                'text' => __('tbe::general.keys.back'),
+                'callback_data' => encodeCallback(self::$type, 'menu', [$lastPage, 0, $sort, $direction]),
+            ]),
+        ]);
+
+        return new TelegramResponse(
+            text: __('tbe-user-management::bot_users.main.text.filter_menu'),
+            replyMarkup: $replyMarkup,
+        );
     }
 
     public static function sortMenu(): TelegramResponse
@@ -146,6 +213,7 @@ class BotUsersFeature
                     'suspendedDate' => $botUser->suspended_at?->format('Y-m-d H:i:s'),
                 ]) :
                 __('tbe::general.status.notSuspended'),
+            'userReachability' => mb_trim(self::reachabilityEmoji($botUser).' '.self::reachabilityLabel($botUser)),
             'userCreatedAt' => $botUser->created_at,
             'userUpdatedAt' => $botUser->updated_at,
             'dataReceiveTime' => now()->format('Y-m-d H:i:s'),

@@ -6,8 +6,10 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
+use TelegramBotEssentials\UserManagement\DTOs\BotUserFilter;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
 use TelegramBotEssentials\UserManagement\Providers\EventServiceProvider;
+use TelegramBotEssentials\UserManagement\Services\BotUserFilters;
 use TelegramBotEssentials\UserManagement\Services\BotUserSorts;
 use TelegramBotEssentials\UserManagement\Services\UserManagementSections;
 use TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin\BotUserActionsQuery;
@@ -25,6 +27,7 @@ class TbeUserManagementServiceProvider extends ServiceProvider
         require_once __DIR__.'/helpers.php';
 
         $this->app->singleton(BotUserSorts::class, fn () => new BotUserSorts);
+        $this->app->singleton(BotUserFilters::class, fn () => new BotUserFilters);
         $this->app->singleton(UserManagementSections::class, fn () => new UserManagementSections);
 
         $this->mergeConfigFrom(__DIR__.'/../config/tbe-user-management.php', 'tbe-user-management');
@@ -49,6 +52,7 @@ class TbeUserManagementServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerDefaultSorts();
+        $this->registerDefaultFilters();
     }
 
     protected function registerPublishing(): void
@@ -94,6 +98,44 @@ class TbeUserManagementServiceProvider extends ServiceProvider
             display: fn (BotUser $user) => $user->telegramUser->username
                 ? '@'.$user->telegramUser->username
                 : (mb_substr($user->telegramUser->full_name, 0, 16, 'UTF-8') ?: '?'),
+        ));
+    }
+
+    /**
+     * The three failure states are kept apart rather than lumped into one
+     * "cannot reach" entry, because what an admin does about them differs: a
+     * block is the user's own choice, unreachable usually means they never
+     * started the bot, and deactivated means the account is gone for good.
+     */
+    private function registerDefaultFilters(): void
+    {
+        botUserFilters()->addFilter(new BotUserFilter(
+            key: 'all',
+            label: __('tbe-user-management::bot_users.filters.all'),
+        ));
+
+        botUserFilters()->addFilter(new BotUserFilter(
+            key: 'reachable',
+            label: __('tbe-user-management::bot_users.filters.reachable'),
+            apply: fn ($query) => $query->reachable(),
+        ));
+
+        botUserFilters()->addFilter(new BotUserFilter(
+            key: BotUser::STATUS_BLOCKED,
+            label: __('tbe-user-management::bot_users.filters.blocked'),
+            apply: fn ($query) => $query->withStatus(BotUser::STATUS_BLOCKED),
+        ));
+
+        botUserFilters()->addFilter(new BotUserFilter(
+            key: BotUser::STATUS_UNREACHABLE,
+            label: __('tbe-user-management::bot_users.filters.unreachable'),
+            apply: fn ($query) => $query->withStatus(BotUser::STATUS_UNREACHABLE),
+        ));
+
+        botUserFilters()->addFilter(new BotUserFilter(
+            key: BotUser::STATUS_DEACTIVATED,
+            label: __('tbe-user-management::bot_users.filters.deactivated'),
+            apply: fn ($query) => $query->deactivated(),
         ));
     }
 }

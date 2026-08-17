@@ -30,7 +30,10 @@ class LogBotInteractions
                 'shipping_query' => $this->processShippingQueryUpdate(),
                 'pre_checkout_query' => $this->processPreCheckoutQueryUpdate(),
                 'poll_answer' => $this->processPollAnswerUpdate(),
-                'my_chat_member' => $this->processChatMemberUpdate(wHook()->update()->myChatMember),
+                // Recorded by LogBotUserStatusChanges instead, which also sees
+                // the blocks discovered by a failed send rather than by an
+                // update, so one change produces exactly one history row.
+                'my_chat_member' => null,
                 'chat_member' => $this->processChatMemberUpdate(wHook()->update()->chatMember),
                 'chat_join_request' => $this->processChatJoinRequestUpdate(),
                 default => mixedDebugMessage($event->updateType),

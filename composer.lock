@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fffd5d9e7cde5ed9839e2cb9e33c7d41",
+    "content-hash": "432b8dca44e6fd289e704f55e1308227",
     "packages": [
         {
             "name": "brick/math",
@@ -6137,16 +6137,16 @@
         },
         {
             "name": "telegram-bot-essentials/essence",
-            "version": "v0.8.12",
+            "version": "v0.9.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:Elyar0/telegram-bot-essentials.git",
-                "reference": "af108b33ea350f11f8c70b95aa2ce8798173c774"
+                "reference": "c49ae92fa5707b319f07923a9681b0e28a663173"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elyar0/telegram-bot-essentials/zipball/af108b33ea350f11f8c70b95aa2ce8798173c774",
-                "reference": "af108b33ea350f11f8c70b95aa2ce8798173c774",
+                "url": "https://api.github.com/repos/Elyar0/telegram-bot-essentials/zipball/c49ae92fa5707b319f07923a9681b0e28a663173",
+                "reference": "c49ae92fa5707b319f07923a9681b0e28a663173",
                 "shasum": ""
             },
             "require": {
@@ -6188,10 +6188,10 @@
             ],
             "description": "This is the how i like to develop my bots and handle different incoming requests",
             "support": {
-                "source": "https://github.com/Elyar0/telegram-bot-essentials/tree/v0.8.12",
+                "source": "https://github.com/Elyar0/telegram-bot-essentials/tree/v0.9.0",
                 "issues": "https://github.com/Elyar0/telegram-bot-essentials/issues"
             },
-            "time": "2026-06-19T11:56:00+00:00"
+            "time": "2026-07-26T20:51:22+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

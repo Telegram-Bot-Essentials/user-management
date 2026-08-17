@@ -36,6 +36,27 @@ class BotUsersQuery extends CallbackQuery
     }
 
     /**
+     * @throws TelegramSDKException
+     */
+    public function filterMenu(): void
+    {
+        BotUsersFeature::filterMenu()->update();
+    }
+
+    /**
+     * @throws InvalidPageNumber
+     * @throws TelegramSDKException
+     */
+    public function filter(string $key): void
+    {
+        $navState = navState()->getForCurrentMessage(BotUsersFeature::NAV_STATE_DEFAULTS);
+
+        // Back to page one: a different filter is a different result set, so
+        // the page they were on no longer points at the same users.
+        BotUsersFeature::menu(1, 0, $navState['sort'], $navState['direction'], $key)->update();
+    }
+
+    /**
      * @throws InvalidPageNumber
      * @throws TelegramSDKException
      */

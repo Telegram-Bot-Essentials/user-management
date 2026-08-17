@@ -4,6 +4,7 @@ return [
     'main' => [
         'text' => [
             'sort_menu' => 'روش مرتب‌سازی را انتخاب کنید:',
+            'filter_menu' => 'فیلتر را انتخاب کنید:',
             'index' => 'مدیریت کاربران ربات'
                 ."\r\n"
                 ."\r\n"
@@ -19,6 +20,7 @@ return [
                 ."\r\n"
                 ."نقش: :userRole\r\n"
                 ."وضعیت: :userSuspendStatus\r\n"
+                ."دسترسی‌پذیری: :userReachability\r\n"
                 ."تاریخ عضویت: :userCreatedAt\r\n"
                 ."آخرین تعامل: :userUpdatedAt\r\n"
                 ."\r\n"
@@ -36,6 +38,7 @@ return [
         ],
         'keys' => [
             'sort' => '🔀 مرتب‌سازی: :sort',
+            'filter' => '🔎 فیلتر: :filter',
             'user_column_header' => 'کاربر',
             'user' => ':fullName :suspendStatus - :credit',
             'userIsActive' => '✅ کاربر فعال است',
@@ -53,5 +56,18 @@ return [
         'last_interaction' => 'آخرین تعامل',
         'created_at' => 'تاریخ عضویت',
         'username' => 'نام کاربری',
+    ],
+    'filters' => [
+        'all' => 'همه کاربران',
+        'reachable' => 'در دسترس',
+        'blocked' => 'ربات را بلاک کرده',
+        'unreachable' => 'در دسترس نیست',
+        'deactivated' => 'اکانت حذف‌شده',
+    ],
+    'reachability' => [
+        'active' => 'در دسترس',
+        'blocked' => 'ربات را بلاک کرده',
+        'unreachable' => 'در دسترس نیست',
+        'deactivated' => 'اکانت حذف‌شده',
     ],
 ];

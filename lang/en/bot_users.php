@@ -4,6 +4,7 @@ return [
     'main' => [
         'text' => [
             'sort_menu' => 'Choose a sort:',
+            'filter_menu' => 'Choose a filter:',
             'index' => 'Manage bot users'
             ."\r\n"
             ."\r\n"
@@ -19,6 +20,7 @@ return [
                 ."\r\n"
                 ."Role: :userRole\r\n"
                 ."Status: :userSuspendStatus\r\n"
+                ."Reachability: :userReachability\r\n"
                 ."Joined At: :userCreatedAt\r\n"
                 ."Last Interaction: :userUpdatedAt\r\n"
                 ."\r\n"
@@ -36,6 +38,7 @@ return [
         ],
         'keys' => [
             'sort' => '🔀 Sort: :sort',
+            'filter' => '🔎 Filter: :filter',
             'user_column_header' => 'User',
             'user' => ':fullName :suspendStatus - :credit',
             'userIsActive' => '✅ User is active',
@@ -53,5 +56,18 @@ return [
         'last_interaction' => 'Last interaction',
         'created_at' => 'Join date',
         'username' => 'Username',
+    ],
+    'filters' => [
+        'all' => 'All users',
+        'reachable' => 'Reachable',
+        'blocked' => 'Blocked the bot',
+        'unreachable' => 'Unreachable',
+        'deactivated' => 'Deleted account',
+    ],
+    'reachability' => [
+        'active' => 'Reachable',
+        'blocked' => 'Blocked the bot',
+        'unreachable' => 'Unreachable',
+        'deactivated' => 'Deleted account',
     ],
 ];
