@@ -8,8 +8,10 @@ return [
             'index' => 'Manage bot users'
             ."\r\n"
             ."\r\n"
-            ."User count: :userCount\r\n"
-            ."Users joined in the last 24 hours: :usersJoinedLastDay\r\n",
+            ."👥 Total: :total | Suspended: :suspended | Admins: :admins | Moderators: :moderators\r\n"
+            ."📈 Joined: 24h :joinedDay · 7d :joinedWeek · 30d :joinedMonth\r\n"
+            ."📡 Reachable: :reachable | Blocked: :blocked | Unreachable: :unreachable | Deleted: :deactivated\r\n"
+            .'⚡️ Active: 24h :activeDay · 7d :activeWeek · 30d :activeMonth',
             'show_user' => ':userFullName'
                 ."\n\n"
                 ."Telegram User ID: :userPeerId\r\n"

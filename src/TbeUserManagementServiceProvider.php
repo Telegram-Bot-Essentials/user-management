@@ -12,6 +12,7 @@ use TelegramBotEssentials\UserManagement\Providers\EventServiceProvider;
 use TelegramBotEssentials\UserManagement\Services\BotUserFilters;
 use TelegramBotEssentials\UserManagement\Services\BotUserSorts;
 use TelegramBotEssentials\UserManagement\Services\UserManagementSections;
+use TelegramBotEssentials\UserManagement\Services\UserManagementStats;
 use TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin\BotUserActionsQuery;
 use TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin\BotUsersQuery;
 use TelegramBotEssentials\UserManagement\Telegram\StateAnswers\Admin\BotUsersAnswer;
@@ -29,6 +30,7 @@ class TbeUserManagementServiceProvider extends ServiceProvider
         $this->app->singleton(BotUserSorts::class, fn () => new BotUserSorts);
         $this->app->singleton(BotUserFilters::class, fn () => new BotUserFilters);
         $this->app->singleton(UserManagementSections::class, fn () => new UserManagementSections);
+        $this->app->singleton(UserManagementStats::class, fn () => new UserManagementStats);
 
         $this->mergeConfigFrom(__DIR__.'/../config/tbe-user-management.php', 'tbe-user-management');
 
@@ -41,7 +43,7 @@ class TbeUserManagementServiceProvider extends ServiceProvider
 
         callbackQueryBus()->addCallbackQueries([
             BotUsersQuery::class,
-//            BotUserActionsQuery::class,
+            //            BotUserActionsQuery::class,
         ]);
 
         stateAnswerBus()->addStateAnswers([

@@ -3,6 +3,7 @@
 namespace TelegramBotEssentials\UserManagement\Telegram\Features\Admin;
 
 use Telegram\Bot\Keyboard\Keyboard;
+use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Services\TelegramPaginator;
@@ -19,10 +20,10 @@ class BotUsersFeature
     public const NAV_STATE_DEFAULTS = ['sort' => null, 'direction' => null, 'filter' => null, 'lastPage' => 1];
 
     /**
-     * @param string|null $filter overrides the filter held in nav state, which
-     *                            is how choosing one from the filter menu takes
-     *                            effect. Passed in code rather than through
-     *                            callback_data, which has no room left.
+     * @param  string|null  $filter  overrides the filter held in nav state, which
+     *                               is how choosing one from the filter menu takes
+     *                               effect. Passed in code rather than through
+     *                               callback_data, which has no room left.
      *
      * @throws InvalidPageNumber
      */
@@ -34,10 +35,7 @@ class BotUsersFeature
             $filter ?? navState()->getForCurrentMessage(self::NAV_STATE_DEFAULTS)['filter']
         );
 
-        $text = __('tbe-user-management::bot_users.main.text.index', [
-            'userCount' => BotUser::count(),
-            'usersJoinedLastDay' => BotUser::where('created_at', '>', now()->subDays(1))->count(),
-        ]);
+        $text = self::statsText();
         $users = botUserSorts()
             ->apply($sort, botUserFilters()->apply($filter, BotUser::query()->with('telegramUser')), $direction)
             ->paginate(perPage: 10, page: $page);
@@ -78,7 +76,7 @@ class BotUsersFeature
             ]),
         ]);
 
-        $users->each(function (BotUser $user) use ($replyMarkup, $page, $sort, $direction) {
+        $users->each(function (BotUser $user) use ($replyMarkup, $sort) {
             $callback = encodeCallback(self::$type, 'show', [$user->id]);
             if ($user->telegramUser->username) {
                 $name = '@'.$user->telegramUser->username;
@@ -109,6 +107,85 @@ class BotUsersFeature
             'filter' => $filter,
             'lastPage' => $page,
         ]);
+    }
+
+    /**
+     * The header of the user list: the state of the user base, followed by
+     * whatever other packages have registered about it.
+     */
+    private static function statsText(): string
+    {
+        $counts = self::userCounts();
+
+        $text = self::markLtr(__('tbe-user-management::bot_users.main.text.index', [
+            'total' => number_format($counts->total),
+            'suspended' => number_format($counts->suspended),
+            'admins' => number_format($counts->admins),
+            'moderators' => number_format($counts->moderators),
+            'joinedDay' => number_format($counts->joined_day),
+            'joinedWeek' => number_format($counts->joined_week),
+            'joinedMonth' => number_format($counts->joined_month),
+            'reachable' => number_format($counts->reachable),
+            'blocked' => number_format($counts->blocked),
+            'unreachable' => number_format($counts->unreachable),
+            'deactivated' => number_format($counts->deactivated),
+            'activeDay' => number_format($counts->active_day),
+            'activeWeek' => number_format($counts->active_week),
+            'activeMonth' => number_format($counts->active_month),
+        ]));
+
+        userManagementStats()->render()->each(function (string $block) use (&$text) {
+            $text .= "\r\n\r\n".self::markLtr($block);
+        });
+
+        return $text;
+    }
+
+    /**
+     * Every number in the header in one pass over bot_users. The table is
+     * scanned whole either way, so conditional sums cost no more than the
+     * single COUNT this replaced.
+     *
+     * telegram_users is joined rather than counted separately because
+     * deactivation lives there and outranks the per-bot status column, which
+     * keeps the four reachability numbers mutually exclusive.
+     */
+    private static function userCounts(): object
+    {
+        $day = now()->subDay();
+        $week = now()->subWeek();
+        $month = now()->subMonth();
+
+        return BotUser::query()
+            ->leftJoin('telegram_users', 'bot_users.telegram_user_peer_id', '=', 'telegram_users.peer_id')
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('SUM(CASE WHEN bot_users.suspended_at IS NOT NULL THEN 1 ELSE 0 END) as suspended')
+            ->selectRaw('SUM(CASE WHEN bot_users.power = ? THEN 1 ELSE 0 END) as admins', [Roles::ADMIN->value])
+            ->selectRaw('SUM(CASE WHEN bot_users.power = ? THEN 1 ELSE 0 END) as moderators', [Roles::MODERATOR->value])
+            ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_day', [$day])
+            ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_week', [$week])
+            ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_month', [$month])
+            ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? THEN 1 ELSE 0 END) as reachable', [BotUser::STATUS_ACTIVE])
+            ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? THEN 1 ELSE 0 END) as blocked', [BotUser::STATUS_BLOCKED])
+            ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? THEN 1 ELSE 0 END) as unreachable', [BotUser::STATUS_UNREACHABLE])
+            ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NOT NULL THEN 1 ELSE 0 END) as deactivated')
+            ->selectRaw('SUM(CASE WHEN bot_users.last_interaction > ? THEN 1 ELSE 0 END) as active_day', [$day])
+            ->selectRaw('SUM(CASE WHEN bot_users.last_interaction > ? THEN 1 ELSE 0 END) as active_week', [$week])
+            ->selectRaw('SUM(CASE WHEN bot_users.last_interaction > ? THEN 1 ELSE 0 END) as active_month', [$month])
+            ->toBase()
+            ->first();
+    }
+
+    /**
+     * Telegram lays the header out right to left, which reorders a line that
+     * mixes Persian labels with digit groups and separators. A left-to-right
+     * mark at the start of each line pins it down.
+     */
+    private static function markLtr(string $text): string
+    {
+        return collect(preg_split('/\r\n|\r|\n/', $text))
+            ->map(fn (string $line) => $line === '' ? '' : "\u{200E}".ltrim($line, "\u{200E}"))
+            ->implode("\r\n");
     }
 
     /**
@@ -294,7 +371,7 @@ class BotUsersFeature
     /**
      * @throws InvalidPageNumber
      */
-    static function userActionsHistory(BotUser $user, int $page = 1, int $currentPage = 0): TelegramResponse
+    public static function userActionsHistory(BotUser $user, int $page = 1, int $currentPage = 0): TelegramResponse
     {
         $userName = htmlspecialchars(
             $user->telegramUser->username

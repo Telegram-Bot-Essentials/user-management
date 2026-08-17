@@ -8,8 +8,10 @@ return [
             'index' => 'مدیریت کاربران ربات'
                 ."\r\n"
                 ."\r\n"
-                ."تعداد کاربران: :userCount\r\n"
-                ."کاربران اضافه‌شده در ۲۴ ساعت گذشته: :usersJoinedLastDay\r\n",
+                ."👥 کل: :total | معلق: :suspended | ادمین: :admins | ناظر: :moderators\r\n"
+                ."📈 عضویت: 24س :joinedDay · 7ر :joinedWeek · 30ر :joinedMonth\r\n"
+                ."📡 در دسترس: :reachable | بلاک: :blocked | ناموجود: :unreachable | حذف‌شده: :deactivated\r\n"
+                .'⚡️ فعال: 24س :activeDay · 7ر :activeWeek · 30ر :activeMonth',
             'show_user' => ':userFullName'
                 ."\n\n"
                 ."شناسه کاربر در تلگرام: :userPeerId\r\n"
