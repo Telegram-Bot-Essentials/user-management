@@ -184,7 +184,15 @@ class BotUsersFeature
     private static function markLtr(string $text): string
     {
         return collect(preg_split('/\r\n|\r|\n/', $text))
-            ->map(fn (string $line) => $line === '' ? '' : "\u{200E}".ltrim($line, "\u{200E}"))
+            ->map(function (string $line) {
+                // Not ltrim(): its character list is bytes, and the mark shares
+                // its leading byte with emoji such as ⚡️, which it would eat.
+                if ($line === '' || str_starts_with($line, "\u{200E}")) {
+                    return $line;
+                }
+
+                return "\u{200E}".$line;
+            })
             ->implode("\r\n");
     }
 
