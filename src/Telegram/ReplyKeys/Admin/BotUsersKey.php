@@ -10,16 +10,12 @@ use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature
 
 class BotUsersKey extends ReplyKey
 {
-    protected string $text = 'Bot Users 👥';
+    protected string $textKey = 'tbe-user-management::bot_users.reply_key';
 
     protected int $perm = Roles::ADMIN->value;
 
-    protected string $response = 'Bot Users executed successfully.';
+    protected string $responseKey = '';
 
-    public function __construct()
-    {
-        $this->text = __('tbe-user-management::bot_users.reply_key');
-    }
 
     /**
      * @throws InvalidPageNumber
