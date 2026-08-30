@@ -1,0 +1,919 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\BotUserFilter\:\:applyTo\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/DTOs/BotUserFilter.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\BotUserFilter\:\:applyTo\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/DTOs/BotUserFilter.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\BotUserFilter\:\:applyTo\(\) should return Illuminate\\Database\\Eloquent\\Builder but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/DTOs/BotUserFilter.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/DTOs/BotUserSort.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort\:\:applyTo\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/DTOs/BotUserSort.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort\:\:applyTo\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/DTOs/BotUserSort.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort\:\:applyTo\(\) should return Illuminate\\Database\\Eloquent\\Builder but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/DTOs/BotUserSort.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort\:\:displayValue\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 2
+			path: src/DTOs/BotUserSort.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\UserSection\:\:contentFor\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/DTOs/UserSection.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\UserSection\:\:contentFor\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/DTOs/UserSection.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\UserSection\:\:labelFor\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/DTOs/UserSection.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\UserSection\:\:targetFor\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/DTOs/UserSection.php
+
+		-
+			message: '#^Trying to invoke Closure\|null but it might not be a callable\.$#'
+			identifier: callable.nonCallable
+			count: 2
+			path: src/DTOs/UserSection.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\DTOs\\UserStat\:\:render\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/DTOs/UserStat.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$state\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\-\>'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Cannot access property \$bio on Telegram\\Bot\\Objects\\ChatJoinRequest\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Cannot access property \$currency on Telegram\\Bot\\Objects\\Payments\\PreCheckoutQuery\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Cannot access property \$data on Telegram\\Bot\\Objects\\CallbackQuery\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Cannot access property \$invoicePayload on Telegram\\Bot\\Objects\\Payments\\PreCheckoutQuery\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Cannot access property \$invoicePayload on Telegram\\Bot\\Objects\\Payments\\ShippingQuery\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Cannot access property \$query on Telegram\\Bot\\Objects\\ChosenInlineResult\|null\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Cannot access property \$query on Telegram\\Bot\\Objects\\InlineQuery\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Cannot access property \$resultId on Telegram\\Bot\\Objects\\ChosenInlineResult\|null\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Cannot access property \$totalAmount on Telegram\\Bot\\Objects\\Payments\\PreCheckoutQuery\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Parameter \#1 \$chatMemberUpdated of method TelegramBotEssentials\\UserManagement\\Listeners\\LogBotInteractions\:\:processChatMemberUpdate\(\) expects Telegram\\Bot\\Objects\\ChatMemberUpdated, Telegram\\Bot\\Objects\\ChatMemberUpdated\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Parameter \#1 \$input of function decodeCallback expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Listeners/LogBotInteractions.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$bot_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Listeners/LogBotUserStatusChanges.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Models\\BotUserAction\:\:bot\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Models/BotUserAction.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Models\\BotUserAction\:\:botUser\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Models/BotUserAction.php
+
+		-
+			message: '#^Cannot call method isActive\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Services/BotUserFilters.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserFilters\:\:apply\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/BotUserFilters.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserFilters\:\:apply\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/BotUserFilters.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserFilters\:\:getDefaultKey\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Services/BotUserFilters.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserFilters\:\:getFilter\(\) should return TelegramBotEssentials\\UserManagement\\DTOs\\BotUserFilter\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Services/BotUserFilters.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserFilters\:\:getFilters\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/BotUserFilters.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:filter\(\) expects \(callable\(mixed, int\|string\)\: bool\)\|null, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\BotUserFilter\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/BotUserFilters.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:has\(\) expects array\<\(int\|string\)\>\|int\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/BotUserFilters.php
+
+		-
+			message: '#^Property TelegramBotEssentials\\UserManagement\\Services\\BotUserFilters\:\:\$filters with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/BotUserFilters.php
+
+		-
+			message: '#^Cannot call method isActive\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Function nextInArray not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:apply\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:apply\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:getDefaultKey\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:getSort\(\) should return TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:getSorts\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:next\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:resolveDirection\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:filter\(\) expects \(callable\(mixed, int\|string\)\: bool\)\|null, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:has\(\) expects array\<\(int\|string\)\>\|int\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Property TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:\$sorts with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/BotUserSorts.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\UserManagementSections\:\:getSectionsFor\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/UserManagementSections.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:filter\(\) expects \(callable\(mixed, int\|string\)\: bool\)\|null, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\UserSection\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/UserManagementSections.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:sortBy\(\) expects array\<array\{string, string\}\|\(callable\(mixed, int\|string\)\: mixed\)\|string\>\|\(callable\(mixed, int\|string\)\: mixed\)\|string, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\UserSection\)\: int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/UserManagementSections.php
+
+		-
+			message: '#^Property TelegramBotEssentials\\UserManagement\\Services\\UserManagementSections\:\:\$sections with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/UserManagementSections.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\UserManagementStats\:\:getStats\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/UserManagementStats.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\UserManagementStats\:\:render\(\) should return Illuminate\\Support\\Collection\<int, string\> but returns Illuminate\\Support\\Collection\<int, non\-falsy\-string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Services/UserManagementStats.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:filter\(\) expects \(callable\(mixed, int\|string\)\: bool\)\|null, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\UserStat\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/UserManagementStats.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:map\(\) expects callable\(mixed, int\|string\)\: \(string\|null\), Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\UserStat\)\: \(string\|null\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/UserManagementStats.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:sortBy\(\) expects array\<array\{string, string\}\|\(callable\(mixed, int\|string\)\: mixed\)\|string\>\|\(callable\(mixed, int\|string\)\: mixed\)\|string, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\UserStat\)\: int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/UserManagementStats.php
+
+		-
+			message: '#^Property TelegramBotEssentials\\UserManagement\\Services\\UserManagementStats\:\:\$stats with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/UserManagementStats.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$last_interaction\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Binary operation "\." between ''@'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot access property \$full_name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot access property \$username on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot call method deactivated\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot call method join\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot call method orderBy\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot call method orderByDesc\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot call method reachable\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot call method select\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot call method shortRelativeToNowDiffForHumans\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Cannot call method withStatus\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$string of function mb_substr expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/TbeUserManagementServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$power\.$#'
+			identifier: property.notFound
+			count: 3
+			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
+
+		-
+			message: '#^Cannot access property \$peer_id on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
+
+		-
+			message: '#^Function nextInArray not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
+
+		-
+			message: '#^Parameter \#1 \$direction of method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:toggleDirection\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
+
+		-
+			message: '#^Parameter \#1 \$key of method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:resolve\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
+
+		-
+			message: '#^Parameter \#1 \$page of static method TelegramBotEssentials\\UserManagement\\Telegram\\Features\\Admin\\BotUsersFeature\:\:menu\(\) expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
+
+		-
+			message: '#^Parameter \#3 \$sort of static method TelegramBotEssentials\\UserManagement\\Telegram\\Features\\Admin\\BotUsersFeature\:\:menu\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
+
+		-
+			message: '#^Parameter \#4 \$direction of static method TelegramBotEssentials\\UserManagement\\Telegram\\Features\\Admin\\BotUsersFeature\:\:menu\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$suspended_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\UserManagement\\Models\\BotUserAction\:\:\$action\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\UserManagement\\Models\\BotUserAction\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\UserManagement\\Models\\BotUserAction\:\:\$state\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property TelegramBotEssentials\\UserManagement\\Models\\BotUserAction\:\:\$update_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$active_day\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$active_month\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$active_week\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$admins\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$blocked\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$deactivated\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$joined_day\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$joined_month\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$joined_week\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$moderators\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$reachable\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$suspended\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$total\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$unreachable\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Binary operation "\." between "\\r\\n\\r\\n" and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Binary operation "\." between ''@'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 4
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access offset ''rows'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access offset ''text'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$first_name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$full_name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$full_name on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$last_name on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$mode on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$peer_id on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$tel on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$telegramUser on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$username on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 6
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$username on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot call method contentFor\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot call method displayValue\(\) on TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot call method each\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot call method format\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot call method groupBy\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot call method label\(\) on TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort\|null\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot call method labelFor\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot call method targetFor\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Telegram\\Features\\Admin\\BotUsersFeature\:\:formatGroupedActions\(\) has parameter \$actions with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Telegram\\Features\\Admin\\BotUsersFeature\:\:renderSections\(\) has parameter \$replyMarkup with generic class Telegram\\Bot\\Keyboard\\Keyboard but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Method TelegramBotEssentials\\UserManagement\\Telegram\\Features\\Admin\\BotUsersFeature\:\:userCounts\(\) should return object but returns stdClass\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$buttons of method Telegram\\Bot\\Keyboard\\Keyboard\<\(int\|string\),mixed\>\:\:row\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:each\(\) expects callable\(mixed, int\|string\)\: mixed, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\BotUserFilter\)\: void given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:each\(\) expects callable\(mixed, int\|string\)\: mixed, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\BotUserSort\)\: void given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:each\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: mixed, Closure\(TelegramBotEssentials\\Essence\\Models\\BotUser\)\: void given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int\<0, max\>,string\|false\>\:\:map\(\) expects callable\(string\|false, int\<0, max\>\)\: string, Closure\(string\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$direction of method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:resolveDirection\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$key of method TelegramBotEssentials\\UserManagement\\Services\\BotUserFilters\:\:resolve\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$key of method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:resolve\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$num of function number_format expects float, mixed given\.$#'
+			identifier: argument.type
+			count: 14
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$string of function htmlspecialchars expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$string of function mb_substr expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<int\<0, max\>, string\>\|iterable\<int\<0, max\>, string\>\|null, list\<string\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#2 \$replace of function __ expects array\<string, bool\|float\|int\|string\|null\>, array\<string, mixed\> given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Part \$botUser\-\>telegramUser\-\>full_name \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Part \$botUser\-\>telegramUser\-\>peer_id \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Part \$botUserAction\-\>created_at\-\>format\(''H\:i\:s''\) \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Part \$botUserAction\-\>update_type \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Cannot access property \$peer_id on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: src/Telegram/StateAnswers/Admin/BotUsersAnswer.php
+
+		-
+			message: '#^Cannot access property \$text on Telegram\\Bot\\Objects\\Message\|null\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: src/Telegram/StateAnswers/Admin/BotUsersAnswer.php
+
+		-
+			message: '#^Parameter \#1 \$page of static method TelegramBotEssentials\\Essence\\Services\\TelegramPaginator\:\:validatePageInput\(\) expects int\|string, string\|null given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Telegram/StateAnswers/Admin/BotUsersAnswer.php
+
+		-
+			message: '#^Property TelegramBotEssentials\\UserManagement\\Telegram\\StateAnswers\\Admin\\BotUsersAnswer\:\:\$allowedFields type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Telegram/StateAnswers/Admin/BotUsersAnswer.php
