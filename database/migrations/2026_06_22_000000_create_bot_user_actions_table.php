@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Schema;
 use TelegramBotEssentials\Essence\Models\Bot;
 use TelegramBotEssentials\Essence\Models\BotUser;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('bot_user_actions', function (Blueprint $table) {

@@ -17,12 +17,12 @@ use TelegramBotEssentials\UserManagement\Listeners\LogBotUserStatusChanges;
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-//        BotCallbackQueryHandled::class => [LogBotInteractions::class],
-//        BotReplyKeyHandled::class => [LogBotInteractions::class],
-//        BotStateAnswerHandled::class => [LogBotInteractions::class],
-//        BotCommandHandled::class => [LogBotInteractions::class],
-//        BotInlineQueryHandled::class => [LogBotInteractions::class],
-//        BotDeepLinkReceived::class => [LogBotInteractions::class],
+        //        BotCallbackQueryHandled::class => [LogBotInteractions::class],
+        //        BotReplyKeyHandled::class => [LogBotInteractions::class],
+        //        BotStateAnswerHandled::class => [LogBotInteractions::class],
+        //        BotCommandHandled::class => [LogBotInteractions::class],
+        //        BotInlineQueryHandled::class => [LogBotInteractions::class],
+        //        BotDeepLinkReceived::class => [LogBotInteractions::class],
         BotUpdateReceived::class => [LogBotInteractions::class],
         BotUserStatusChanged::class => [LogBotUserStatusChanges::class],
     ];

@@ -18,11 +18,11 @@ class UserSection
         public ?Closure $content = null,
         public bool|Closure $active = true,
     ) {
-        if ($this->mode === SectionMode::BUTTON && !$this->target) {
+        if ($this->mode === SectionMode::BUTTON && ! $this->target) {
             throw new TbeException("User section \"{$this->key}\" is in Button mode but has no target closure");
         }
 
-        if ($this->mode === SectionMode::INLINE && !$this->content) {
+        if ($this->mode === SectionMode::INLINE && ! $this->content) {
             throw new TbeException("User section \"{$this->key}\" is in Inline mode but has no content closure");
         }
     }

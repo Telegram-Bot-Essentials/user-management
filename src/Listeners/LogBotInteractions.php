@@ -2,9 +2,6 @@
 
 namespace TelegramBotEssentials\UserManagement\Listeners;
 
-use App\Enums\PanelType;
-use App\Panels\Admin\Marzban\MarzbanPanelAdminExtension;
-use App\Panels\Admin\Rebecca\RebeccaPanelAdminExtension;
 use Telegram\Bot\Objects\ChatMemberUpdated;
 use TelegramBotEssentials\Essence\Events\BotUpdateReceived;
 use TelegramBotEssentials\UserManagement\Models\BotUserAction;
@@ -17,7 +14,7 @@ class LogBotInteractions
     {
         try {
             $this->event = $event;
-            if (!$event->context->botUserId) {
+            if (! $event->context->botUserId) {
                 return;
             }
 
@@ -49,7 +46,7 @@ class LogBotInteractions
             $userState = null;
         } else {
             $decodedAnswerState = decodeAnswerState(wHook()->user()->state);
-            $userState = $decodedAnswerState['type'] . '->' . $decodedAnswerState['method'];
+            $userState = $decodedAnswerState['type'].'->'.$decodedAnswerState['method'];
         }
 
         if (BotUserAction::isHistoryNavigation($userState)) {
@@ -59,7 +56,7 @@ class LogBotInteractions
         $this->logAction(
             action: wHook()->update()->message->text
                 ?? wHook()->update()->message->caption
-                ?? ('[' . $this->event->updateType . ']'),
+                ?? ('['.$this->event->updateType.']'),
             state: $userState,
         );
     }
@@ -74,7 +71,7 @@ class LogBotInteractions
         }
 
         $this->logAction(
-            action: getInputInlineKeyText() ?? ('[' . $this->event->updateType . ']'),
+            action: getInputInlineKeyText() ?? ('['.$this->event->updateType.']'),
             state: $userState,
         );
     }
@@ -84,14 +81,14 @@ class LogBotInteractions
         $this->logAction(
             action: wHook()->update()->editedMessage->text
                 ?? wHook()->update()->editedMessage->caption
-                ?? ('[' . $this->event->updateType . ']'),
+                ?? ('['.$this->event->updateType.']'),
         );
     }
 
     private function processInlineQueryUpdate(): void
     {
         $this->logAction(
-            action: wHook()->update()->inlineQuery->query ?: ('[' . $this->event->updateType . ']'),
+            action: wHook()->update()->inlineQuery->query ?: ('['.$this->event->updateType.']'),
         );
     }
 
@@ -101,7 +98,7 @@ class LogBotInteractions
 
         $this->logAction(
             action: $chosenInlineResult->query
-                ? $chosenInlineResult->query . ' -> ' . $chosenInlineResult->resultId
+                ? $chosenInlineResult->query.' -> '.$chosenInlineResult->resultId
                 : $chosenInlineResult->resultId,
         );
     }
@@ -109,7 +106,7 @@ class LogBotInteractions
     private function processShippingQueryUpdate(): void
     {
         $this->logAction(
-            action: wHook()->update()->shippingQuery->invoicePayload ?: ('[' . $this->event->updateType . ']'),
+            action: wHook()->update()->shippingQuery->invoicePayload ?: ('['.$this->event->updateType.']'),
         );
     }
 
@@ -134,21 +131,21 @@ class LogBotInteractions
         $this->logAction(
             action: $optionIds === []
                 ? '[retracted vote]'
-                : 'options: ' . implode(', ', $optionIds),
+                : 'options: '.implode(', ', $optionIds),
         );
     }
 
     private function processChatMemberUpdate(ChatMemberUpdated $chatMemberUpdated): void
     {
         $this->logAction(
-            action: $chatMemberUpdated->oldChatMember->status . ' -> ' . $chatMemberUpdated->newChatMember->status,
+            action: $chatMemberUpdated->oldChatMember->status.' -> '.$chatMemberUpdated->newChatMember->status,
         );
     }
 
     private function processChatJoinRequestUpdate(): void
     {
         $this->logAction(
-            action: wHook()->update()->chatJoinRequest->bio ?: ('[' . $this->event->updateType . ']'),
+            action: wHook()->update()->chatJoinRequest->bio ?: ('['.$this->event->updateType.']'),
         );
     }
 
