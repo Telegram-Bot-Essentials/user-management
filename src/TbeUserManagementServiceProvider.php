@@ -74,7 +74,7 @@ class TbeUserManagementServiceProvider extends ServiceProvider
     {
         botUserSorts()->addSort(new BotUserSort(
             key: 'last_interaction',
-            label: __('tbe-user-management::bot_users.sorts.last_interaction'),
+            label: fn () => __('tbe-user-management::bot_users.sorts.last_interaction'),
             apply: fn ($query, $direction) => $direction === 'asc'
                 ? $query->orderBy('last_interaction')
                 : $query->orderByDesc('last_interaction'),
@@ -83,7 +83,7 @@ class TbeUserManagementServiceProvider extends ServiceProvider
 
         botUserSorts()->addSort(new BotUserSort(
             key: 'created_at',
-            label: __('tbe-user-management::bot_users.sorts.created_at'),
+            label: fn () => __('tbe-user-management::bot_users.sorts.created_at'),
             apply: fn ($query, $direction) => $direction === 'asc'
                 ? $query->orderBy('created_at')
                 : $query->orderByDesc('created_at'),
@@ -92,7 +92,7 @@ class TbeUserManagementServiceProvider extends ServiceProvider
 
         botUserSorts()->addSort(new BotUserSort(
             key: 'username',
-            label: __('tbe-user-management::bot_users.sorts.username'),
+            label: fn () => __('tbe-user-management::bot_users.sorts.username'),
             apply: fn ($query, $direction) => $query
                 ->join('telegram_users', 'bot_users.telegram_user_peer_id', '=', 'telegram_users.peer_id')
                 ->orderBy('telegram_users.username', $direction)
@@ -113,30 +113,30 @@ class TbeUserManagementServiceProvider extends ServiceProvider
     {
         botUserFilters()->addFilter(new BotUserFilter(
             key: 'all',
-            label: __('tbe-user-management::bot_users.filters.all'),
+            label: fn () => __('tbe-user-management::bot_users.filters.all'),
         ));
 
         botUserFilters()->addFilter(new BotUserFilter(
             key: 'reachable',
-            label: __('tbe-user-management::bot_users.filters.reachable'),
+            label: fn () => __('tbe-user-management::bot_users.filters.reachable'),
             apply: fn ($query) => $query->reachable(),
         ));
 
         botUserFilters()->addFilter(new BotUserFilter(
             key: BotUser::STATUS_BLOCKED,
-            label: __('tbe-user-management::bot_users.filters.blocked'),
+            label: fn () => __('tbe-user-management::bot_users.filters.blocked'),
             apply: fn ($query) => $query->withStatus(BotUser::STATUS_BLOCKED),
         ));
 
         botUserFilters()->addFilter(new BotUserFilter(
             key: BotUser::STATUS_UNREACHABLE,
-            label: __('tbe-user-management::bot_users.filters.unreachable'),
+            label: fn () => __('tbe-user-management::bot_users.filters.unreachable'),
             apply: fn ($query) => $query->withStatus(BotUser::STATUS_UNREACHABLE),
         ));
 
         botUserFilters()->addFilter(new BotUserFilter(
             key: BotUser::STATUS_DEACTIVATED,
-            label: __('tbe-user-management::bot_users.filters.deactivated'),
+            label: fn () => __('tbe-user-management::bot_users.filters.deactivated'),
             apply: fn ($query) => $query->deactivated(),
         ));
     }

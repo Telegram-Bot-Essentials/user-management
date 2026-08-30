@@ -51,7 +51,7 @@ class BotUsersAnswer extends StateAnswer
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
 
-        $this->messageMeta()->updateAndContinueAction($data);
+        $this->requireMessageMeta()->updateAndContinueAction($data);
     }
 
     /**
@@ -82,7 +82,7 @@ class BotUsersAnswer extends StateAnswer
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
 
-        $this->messageMeta()->updateAndContinueAction($data);
+        $this->requireMessageMeta()->updateAndContinueAction($data);
     }
 
     /**
@@ -113,6 +113,6 @@ class BotUsersAnswer extends StateAnswer
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
 
-        $this->messageMeta()->updateAndContinueAction($data);
+        $this->requireMessageMeta()->updateAndContinueAction($data);
     }
 }

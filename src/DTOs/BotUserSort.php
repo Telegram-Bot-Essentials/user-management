@@ -8,13 +8,23 @@ use TelegramBotEssentials\Essence\Models\BotUser;
 
 class BotUserSort
 {
+    /**
+     * @param  string|Closure(): string  $label  a Closure is resolved on every
+     *                                           read via label(), so a sort registered once at boot still shows
+     *                                           the right language for whichever bot is handling the request
+     */
     public function __construct(
         public string $key,
-        public string $label,
+        public string|Closure $label,
         public Closure $apply,
         public ?Closure $display = null,
         public bool|Closure $active = true,
     ) {}
+
+    public function label(): string
+    {
+        return $this->label instanceof Closure ? ($this->label)() : $this->label;
+    }
 
     public function isActive(): bool
     {

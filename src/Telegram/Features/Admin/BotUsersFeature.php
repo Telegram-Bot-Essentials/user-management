@@ -46,13 +46,13 @@ class BotUsersFeature
         $replyMarkup->row([
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.sort', [
-                    'sort' => botUserSorts()->getSort($sort)->label,
+                    'sort' => botUserSorts()->getSort($sort)->label(),
                 ]),
                 'callback_data' => encodeCallback(self::$type, 'sortMenu'),
             ]),
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.filter', [
-                    'filter' => botUserFilters()->getFilter($filter)?->label ?? '?',
+                    'filter' => botUserFilters()->getFilter($filter)?->label() ?? '?',
                 ]),
                 'callback_data' => encodeCallback(self::$type, 'filterMenu'),
             ]),
@@ -71,7 +71,7 @@ class BotUsersFeature
                 'callback_data' => encodeCallback(self::$type, 'menu', [$page, 0, $sort, $direction]),
             ]),
             Keyboard::inlineButton([
-                'text' => botUserSorts()->getSort($sort)->label.' '.botUserSorts()->directionIndicator($direction),
+                'text' => botUserSorts()->getSort($sort)->label().' '.botUserSorts()->directionIndicator($direction),
                 'callback_data' => encodeCallback(self::$type, 'toggleDirection'),
             ]),
         ]);
@@ -228,7 +228,7 @@ class BotUsersFeature
         botUserFilters()->getFilters()->each(function (BotUserFilter $filter) use ($replyMarkup, $currentFilter) {
             $replyMarkup->row([
                 Keyboard::inlineButton([
-                    'text' => ($filter->key === $currentFilter ? '✅ ' : '').$filter->label,
+                    'text' => ($filter->key === $currentFilter ? '✅ ' : '').$filter->label(),
                     'callback_data' => encodeCallback(self::$type, 'filter', [$filter->key]),
                 ]),
             ]);
@@ -259,7 +259,7 @@ class BotUsersFeature
         botUserSorts()->getSorts()->each(function (BotUserSort $sort) use ($replyMarkup, $currentSort, $direction) {
             $replyMarkup->row([
                 Keyboard::inlineButton([
-                    'text' => ($sort->key === $currentSort ? '✅ ' : '').$sort->label,
+                    'text' => ($sort->key === $currentSort ? '✅ ' : '').$sort->label(),
                     'callback_data' => encodeCallback(self::$type, 'menu', [1, 0, $sort->key, $direction]),
                 ]),
             ]);
