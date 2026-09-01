@@ -331,7 +331,7 @@ parameters:
 			path: src/Services/UserManagementSections.php
 
 		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:sortBy\(\) expects array\<array\{string, string\}\|\(callable\(mixed, int\|string\)\: mixed\)\|string\>\|\(callable\(mixed, int\|string\)\: mixed\)\|string, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\UserSection\)\: int given\.$#'
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:sortBy\(\) expects array\<array\{string, ''asc''\|''desc''\|SortDirection\}\|\(callable\(mixed, int\|string\)\: mixed\)\|string\>\|\(callable\(mixed, int\|string\)\: mixed\)\|int\|string, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\UserSection\)\: int given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Services/UserManagementSections.php
@@ -367,7 +367,7 @@ parameters:
 			path: src/Services/UserManagementStats.php
 
 		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:sortBy\(\) expects array\<array\{string, string\}\|\(callable\(mixed, int\|string\)\: mixed\)\|string\>\|\(callable\(mixed, int\|string\)\: mixed\)\|string, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\UserStat\)\: int given\.$#'
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:sortBy\(\) expects array\<array\{string, ''asc''\|''desc''\|SortDirection\}\|\(callable\(mixed, int\|string\)\: mixed\)\|string\>\|\(callable\(mixed, int\|string\)\: mixed\)\|int\|string, Closure\(TelegramBotEssentials\\UserManagement\\DTOs\\UserStat\)\: int given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Services/UserManagementStats.php

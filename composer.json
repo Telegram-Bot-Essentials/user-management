@@ -1,12 +1,12 @@
 {
     "name": "telegram-bot-essentials/user-management",
-    "description": "User management feature built for telegram-bot-essentials/essence",
+    "description": "Admin bot-user list with filters, sections and interaction logging for telegram-bot-essentials/essence",
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^8.2",
-        "laravel/framework": "^12",
-        "telegram-bot-essentials/essence": "0.12.x-dev"
+        "php": "^8.3",
+        "laravel/framework": "^12 || ^13",
+        "telegram-bot-essentials/essence": "^0.12"
     },
     "require-dev": {
         "larastan/larastan": "^3.0",
