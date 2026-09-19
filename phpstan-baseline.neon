@@ -93,13 +93,13 @@ parameters:
 		-
 			message: '#^Binary operation "\." between mixed and ''\-\>'' results in an error\.$#'
 			identifier: binaryOp.invalid
-			count: 2
+			count: 1
 			path: src/Listeners/LogBotInteractions.php
 
 		-
 			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
 			identifier: binaryOp.invalid
-			count: 2
+			count: 1
 			path: src/Listeners/LogBotInteractions.php
 
 		-
