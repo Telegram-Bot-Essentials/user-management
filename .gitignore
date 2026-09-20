@@ -12,3 +12,6 @@
 /.phpunit.cache
 /.phpunit.result.cache
 /build
+
+# Testbench re-creates this symlink (absolute path) on every install.
+/workbench/storage
