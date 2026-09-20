@@ -93,13 +93,13 @@ parameters:
 		-
 			message: '#^Binary operation "\." between mixed and ''\-\>'' results in an error\.$#'
 			identifier: binaryOp.invalid
-			count: 2
+			count: 1
 			path: src/Listeners/LogBotInteractions.php
 
 		-
 			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
 			identifier: binaryOp.invalid
-			count: 2
+			count: 1
 			path: src/Listeners/LogBotInteractions.php
 
 		-
@@ -251,7 +251,6 @@ parameters:
 			identifier: method.nonObject
 			count: 1
 			path: src/Services/BotUserSorts.php
-
 
 		-
 			message: '#^Method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:apply\(\) has parameter \$query with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
@@ -468,7 +467,6 @@ parameters:
 			identifier: property.nonObject
 			count: 3
 			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
-
 
 		-
 			message: '#^Parameter \#1 \$direction of method TelegramBotEssentials\\UserManagement\\Services\\BotUserSorts\:\:toggleDirection\(\) expects string, mixed given\.$#'
@@ -855,9 +853,15 @@ parameters:
 			path: src/Telegram/Features/Admin/BotUsersFeature.php
 
 		-
-			message: '#^Parameter \#2 \$replace of function __ expects array\<string, .+\>, array.+ given\.$#'
+			message: '#^Parameter \#2 \$replace of function __ expects array\<string, bool\|\(Closure\(string\)\: string\)\|float\|int\|string\|null\>, array\{suspendedDate\: mixed\} given\.$#'
 			identifier: argument.type
-			count: 2
+			count: 1
+			path: src/Telegram/Features/Admin/BotUsersFeature.php
+
+		-
+			message: '#^Parameter \#2 \$replace of function __ expects array\<string, bool\|\(Closure\(string\)\: string\)\|float\|int\|string\|null\>, array\{userFullName\: non\-falsy\-string, userPeerId\: mixed, userUsername\: string, userFirstName\: mixed, userLastName\: mixed, userTel\: mixed, userRole\: string, userSuspendStatus\: \(array\|string\), \.\.\.\} given\.$#'
+			identifier: argument.type
+			count: 1
 			path: src/Telegram/Features/Admin/BotUsersFeature.php
 
 		-
