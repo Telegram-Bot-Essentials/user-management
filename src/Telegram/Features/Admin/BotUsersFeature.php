@@ -96,7 +96,7 @@ class BotUsersFeature
             ]);
         });
 
-        $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(self::$type, $page, $users->lastPage(), 'menu', customPageMethod: 'setMenuPage', extraParams: [$sort, $direction]));
+        TelegramPaginator::addNavigationRow($replyMarkup, self::$type, $page, $users->lastPage(), 'menu', customPageMethod: 'setMenuPage', extraParams: [$sort, $direction]);
 
         return (new TelegramResponse(
             text: $text,
@@ -418,14 +418,15 @@ class BotUsersFeature
                 'callback_data' => encodeCallback(self::$type, 'userActionsHistory', [$user->id, 1, 0]),
             ]),
         ]);
-        $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(
+        TelegramPaginator::addNavigationRow(
+            $replyMarkup,
             self::$type,
             $page,
             max(1, $botUserActions->lastPage()),
             'actionsPage',
             customPageMethod: 'actionsSetPage',
             extraParams: [$user->id],
-        ));
+        );
 
         $replyMarkup->row([
             Keyboard::inlineButton([
@@ -474,14 +475,15 @@ class BotUsersFeature
                 'callback_data' => encodeCallback(self::$type, 'allActionsHistory', [1, 0, $lastPage, $sort, $direction]),
             ]),
         ]);
-        $replyMarkup->row(TelegramPaginator::makeNavigationButtonsRow(
+        TelegramPaginator::addNavigationRow(
+            $replyMarkup,
             self::$type,
             $page,
             max(1, $botUserActions->lastPage()),
             'allActionsPage',
             customPageMethod: 'allActionsSetPage',
             extraParams: [$lastPage, $sort, $direction],
-        ));
+        );
 
         $replyMarkup->row([
             Keyboard::inlineButton([
