@@ -6,6 +6,18 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.20] - 2026-09-26
+
+### Added
+
+- User actions are also written to the log via `tbeLog('user-management')`
+  at debug level, so they show up in log-viewer.
+
+### Changed
+
+- The developer (`tbe-essence.developer.peer_id`) is no longer recorded in the
+  actions history, neither for interactions nor for reachability changes.
+
 ## [0.0.19] - 2026-09-22
 
 ### Changed

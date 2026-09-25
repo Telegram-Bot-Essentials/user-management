@@ -23,6 +23,17 @@ class BotUserAction extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    /**
+     * The developer's own testing traffic is kept out of the history.
+     */
+    public static function isDeveloper(BotUser $botUser): bool
+    {
+        $developerPeerId = config('tbe-essence.developer.peer_id');
+
+        return $developerPeerId !== null
+            && (string) $botUser->telegramUser?->peer_id === (string) $developerPeerId;
+    }
+
     public static function isHistoryNavigation(?string $state): bool
     {
         if (! $state) {

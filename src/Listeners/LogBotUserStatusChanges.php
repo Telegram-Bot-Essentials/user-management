@@ -17,6 +17,10 @@ class LogBotUserStatusChanges
     public function handle(BotUserStatusChanged $event): void
     {
         try {
+            if (BotUserAction::isDeveloper($event->botUser)) {
+                return;
+            }
+
             BotUserAction::create([
                 'bot_id' => $event->botUser->bot_id,
                 'bot_user_id' => $event->botUser->getKey(),
