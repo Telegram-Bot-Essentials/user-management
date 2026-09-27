@@ -151,11 +151,6 @@ class LogBotInteractions
 
     private function logAction(string $action, ?string $state = null): void
     {
-        tbeLog('user-management')->debug('User action', [
-            'action' => $action,
-            'state' => $state,
-        ]);
-
         if (BotUserAction::isDeveloper(wHook()->user())) {
             return;
         }
