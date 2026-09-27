@@ -80,3 +80,24 @@ it('tells an admin the step expired when the message meta was pruned mid-flow', 
 
     expect($this->bot->botUsers()->where('telegram_user_peer_id', 5000)->sole()->state)->toBeNull();
 });
+
+it('writes role and suspension changes to the audit channel, naming the target', function () {
+    config()->set('logging.channels.tbe_audit', ['driver' => 'monolog', 'handler' => Monolog\Handler\TestHandler::class]);
+    config()->set('tbe-essence.logging.audit_channel', 'tbe_audit');
+    /** @var Monolog\Handler\TestHandler $audit */
+    $audit = Illuminate\Support\Facades\Log::channel('tbe_audit')->getLogger()->getHandlers()[0];
+
+    $target = $this->makeBotUser($this->bot, 6001);
+    $target->telegramUser->update(['username' => 'target']);
+    $this->makeBotUser($this->bot, 6000, ['power' => Roles::ADMIN->value]);
+
+    $this->postWebhookUpdate($this->bot, $this->makeCallbackQueryUpdate(encodeCallback('BOTUSERS', 'role', [$target->id]), peerId: 6000))->assertOk();
+    $this->postWebhookUpdate($this->bot, $this->makeCallbackQueryUpdate(encodeCallback('BOTUSERS', 'suspend', [$target->id, 1]), peerId: 6000))->assertOk();
+
+    $messages = array_map(fn ($record) => $record->message, $audit->getRecords());
+
+    expect($messages)->toHaveCount(2)
+        ->and($messages[0])->toEndWith('| Changed role of user#6001 @target: member -> admin')
+        ->and($messages[0])->toContain('user#6000')
+        ->and($messages[1])->toEndWith('| Suspended user#6001 @target');
+});
