@@ -6,6 +6,16 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- Requires essence `^0.15` for `tbeLog()->audit()`.
+- Role and suspension changes are audit entries naming the target and the
+  change (`Changed role of user#6001 @alice: member -> admin`), so they land
+  on the audit channel next to who did it.
+- The per-update `User action` debug log is gone: it duplicated the
+  `bot_user_actions` row written for the same update, which is the real
+  history.
+
 ## [0.0.20] - 2026-09-26
 
 ### Added
