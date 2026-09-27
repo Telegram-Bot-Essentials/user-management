@@ -9,6 +9,7 @@ use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
+use TelegramBotEssentials\Essence\Models\TelegramUser;
 use TelegramBotEssentials\Essence\Telegram\CallbackQueries\CallbackQuery;
 use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature;
 
@@ -118,11 +119,15 @@ class BotUsersQuery extends CallbackQuery
         $botUser->power = $next ?? 0;
         $botUser->save();
 
-        tbeLog('user-management')->info('User role changed', [
-            'target_bot_user_id' => $botUser->getKey(),
-            'previous_power' => $previousPower,
-            'new_power' => $botUser->power,
-        ]);
+        tbeLog('user-management')->audit(
+            'Changed role of '.$this->describe($botUser).': '.$this->roleName($previousPower).' -> '.$this->roleName($botUser->power),
+            [
+                'target_bot_user_id' => $botUser->getKey(),
+                'target_user_id' => $botUser->getAttribute('telegram_user_peer_id'),
+                'previous_power' => $previousPower,
+                'new_power' => $botUser->power,
+            ],
+        );
 
         BotUsersFeature::show($botUser)->update();
     }
@@ -135,8 +140,9 @@ class BotUsersQuery extends CallbackQuery
         $botUser->suspend = $suspend;
         $botUser->save();
 
-        tbeLog('user-management')->info($suspend ? 'User suspended' : 'User unsuspended', [
+        tbeLog('user-management')->audit(($suspend ? 'Suspended ' : 'Unsuspended ').$this->describe($botUser), [
             'target_bot_user_id' => $botUser->getKey(),
+            'target_user_id' => $botUser->getAttribute('telegram_user_peer_id'),
         ]);
 
         BotUsersFeature::show($botUser)->update();
@@ -216,5 +222,22 @@ class BotUsersQuery extends CallbackQuery
             'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_enter_page'),
             'reply_markup' => wHook()->user()->getKeyboard(),
         ]);
+    }
+
+    /** "user#12345 @alice", the target of an admin action as it reads in the audit log. */
+    private function describe(BotUser $botUser): string
+    {
+        $peerId = $botUser->getAttribute('telegram_user_peer_id');
+        $telegramUser = $botUser->telegramUser;
+        $username = $telegramUser instanceof TelegramUser ? $telegramUser->username : null;
+
+        return 'user#'.(is_scalar($peerId) ? $peerId : '?').($username ? ' @'.$username : '');
+    }
+
+    private function roleName(mixed $power): string
+    {
+        $role = is_numeric($power) ? Roles::tryFrom((int) $power) : null;
+
+        return $role ? strtolower($role->name) : 'power '.(is_scalar($power) ? $power : '?');
     }
 }
