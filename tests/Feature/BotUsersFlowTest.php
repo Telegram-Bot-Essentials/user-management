@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Log;
+use Monolog\Handler\TestHandler;
 use TelegramBotEssentials\Essence\Enums\Roles;
+use TelegramBotEssentials\Essence\Events\BotUserStatusChanged;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\UserManagement\Telegram\ReplyKeys\Admin\BotUsersKey;
 
@@ -82,10 +85,10 @@ it('tells an admin the step expired when the message meta was pruned mid-flow', 
 });
 
 it('writes role and suspension changes to the audit channel, naming the target', function () {
-    config()->set('logging.channels.tbe_audit', ['driver' => 'monolog', 'handler' => Monolog\Handler\TestHandler::class]);
+    config()->set('logging.channels.tbe_audit', ['driver' => 'monolog', 'handler' => TestHandler::class]);
     config()->set('tbe-essence.logging.audit_channel', 'tbe_audit');
-    /** @var Monolog\Handler\TestHandler $audit */
-    $audit = Illuminate\Support\Facades\Log::channel('tbe_audit')->getLogger()->getHandlers()[0];
+    /** @var TestHandler $audit */
+    $audit = Log::channel('tbe_audit')->getLogger()->getHandlers()[0];
 
     $target = $this->makeBotUser($this->bot, 6001);
     $target->telegramUser->update(['username' => 'target']);
@@ -100,4 +103,26 @@ it('writes role and suspension changes to the audit channel, naming the target',
         ->and($messages[0])->toEndWith('| Changed role of user#6001 @target: member -> admin')
         ->and($messages[0])->toContain('user#6000')
         ->and($messages[1])->toEndWith('| Suspended user#6001 @target');
+});
+
+it('writes each recorded action to the activity channel too', function () {
+    config()->set('logging.channels.tbe_activity', ['driver' => 'monolog', 'handler' => TestHandler::class]);
+    config()->set('logging.channels.tbe_audit', ['driver' => 'monolog', 'handler' => TestHandler::class]);
+    config()->set('tbe-essence.logging.channels', ['user-management' => 'tbe_activity']);
+    config()->set('tbe-essence.logging.audit_channel', 'tbe_audit');
+    /** @var TestHandler $activity */
+    $activity = Log::channel('tbe_activity')->getLogger()->getHandlers()[0];
+
+    $admin = $this->makeBotUser($this->bot, 6000, ['power' => Roles::ADMIN->value]);
+    $target = $this->makeBotUser($this->bot, 6001);
+
+    $this->postWebhookUpdate($this->bot, $this->makeCallbackQueryUpdate(encodeCallback('BOTUSERS', 'role', [$target->id]), peerId: 6000))->assertOk();
+    event(new BotUserStatusChanged($admin, 'reachable', 'blocked', 'update'));
+
+    $messages = array_map(fn ($record) => $record->message, $activity->getRecords());
+
+    expect($messages)->toHaveCount(2)
+        ->and($messages[0])->toContain('user#6000')
+        ->and($messages[0])->toEndWith('(BOTUSERS->role)')
+        ->and($messages[1])->toEndWith('| bot_user_status: reachable -> blocked (update)');
 });
