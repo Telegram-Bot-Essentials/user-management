@@ -14,6 +14,10 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
   the `activity` channel. Unlike the debug line removed in 0.0.21, it skips
   exactly what the history skips (the developer, history navigation).
 
+### Changed
+
+- Accepts essence 0.16 alongside 0.15.
+
 ## [0.0.21] - 2026-09-27
 
 ### Changed
