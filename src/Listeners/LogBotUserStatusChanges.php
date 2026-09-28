@@ -28,6 +28,12 @@ class LogBotUserStatusChanges
                 'state' => $event->source,
                 'action' => $event->from.' -> '.$event->to,
             ]);
+
+            tbeLog('user-management')->for($event->botUser)->info('bot_user_status: {from} -> {to} ({source})', [
+                'from' => $event->from,
+                'to' => $event->to,
+                'source' => $event->source,
+            ]);
         } catch (\Exception $exception) {
             report($exception);
         }

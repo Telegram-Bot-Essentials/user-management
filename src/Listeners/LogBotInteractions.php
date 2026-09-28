@@ -161,5 +161,14 @@ class LogBotInteractions
             'state' => $state,
             'action' => $action,
         ]);
+
+        // The same history on the activity log channel. {action} is a
+        // placeholder rather than part of the message, so braces the user
+        // typed are never filled in from the context.
+        tbeLog('user-management')->info($state === null ? '{update_type}: {action}' : '{update_type}: {action} ({state})', [
+            'update_type' => $this->event->updateType,
+            'state' => $state,
+            'action' => $action,
+        ]);
     }
 }
