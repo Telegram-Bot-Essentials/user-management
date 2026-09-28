@@ -6,6 +6,14 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- Every action written to the history is also logged at info level via
+  `tbeLog('user-management')` (`callback_query: Buy (SHOP->buy)`,
+  `bot_user_status: reachable -> blocked (update)`), which essence routes to
+  the `activity` channel. Unlike the debug line removed in 0.0.21, it skips
+  exactly what the history skips (the developer, history navigation).
+
 ## [0.0.21] - 2026-09-27
 
 ### Changed
