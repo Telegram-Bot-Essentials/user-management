@@ -6,6 +6,8 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.22] - 2026-09-28
+
 ### Added
 
 - Every action written to the history is also logged at info level via
