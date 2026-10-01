@@ -22,7 +22,7 @@ return [
                 ."📡 دسترسی‌پذیری\r\n"
                 ."در دسترس: :reachable\r\n"
                 ."بلاک کرده: :blocked\r\n"
-                ."ناموجود: :unreachable\r\n"
+                ."در دسترس نیست: :unreachable\r\n"
                 ."حذف‌شده: :deactivated\r\n"
                 ."\r\n"
                 ."⚡️ فعالیت\r\n"
@@ -43,13 +43,13 @@ return [
                 ."تاریخ عضویت: :userCreatedAt\r\n"
                 ."آخرین تعامل: :userUpdatedAt\r\n"
                 ."\r\n"
-                .'⚠️ این اطلاعات در تاریخ :dataReceiveTime دریافت شده است',
+                .'⚠️ آخرین به‌روزرسانی اطلاعات: :dataReceiveTime',
             'user_actions_history_header' => "📜 تاریخچه اقدامات\r\n:userName\r\nصفحه :page/:totalPages",
             'user_actions_history_empty' => "📜 تاریخچه اقدامات\r\n:userName\r\n\r\nهنوز هیچ اقدامی برای این کاربر ثبت نشده است.",
             'user_actions_history_date' => '───── :date ─────',
             'user_actions_history_enter_page' => 'شماره صفحه را وارد کنید:',
-            'user_actions_history_page_loaded' => 'صفحه :page بارگذاری شد.',
-            'user_actions_history_waiting_page' => 'در انتظار شماره صفحه...',
+            'user_actions_history_page_loaded' => 'صفحه :page',
+            'user_actions_history_waiting_page' => 'در انتظار شماره صفحه…',
             'all_actions_history_header' => "📜 تاریخچه اقدامات ربات\r\nصفحه :page/:totalPages",
             'all_actions_history_empty' => "📜 تاریخچه اقدامات ربات\r\n\r\nهنوز هیچ اقدامی ثبت نشده است.",
         ],
@@ -63,7 +63,7 @@ return [
             'userIsActive' => '✅ کاربر فعال است',
             'userIsSuspended' => '⛔️ کاربر تعلیق شده است',
             'userRole' => '💪 نقش: :role',
-            'userUpdateData' => '♻️ بروزرسانی',
+            'userUpdateData' => '♻️ به‌روزرسانی',
             'setUserBalance' => '💵 تنظیم اعتبار',
             'addUserBalance' => '💸 افزایش اعتبار',
             'userActionsHistory' => '📜 تاریخچه اقدامات',
