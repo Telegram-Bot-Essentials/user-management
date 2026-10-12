@@ -85,12 +85,6 @@ parameters:
 			path: src/DTOs/UserStat.php
 
 		-
-			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$state\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Listeners/LogBotInteractions.php
-
-		-
 			message: '#^Binary operation "\." between mixed and ''\-\>'' results in an error\.$#'
 			identifier: binaryOp.invalid
 			count: 1
