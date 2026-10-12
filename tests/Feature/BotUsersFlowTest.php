@@ -79,7 +79,7 @@ it('tells an admin the step expired when the message meta was pruned mid-flow', 
             && str_contains((string) $request['text'], __('tbe::general.alerts.contextExpired'))
     );
 
-    expect($this->bot->botUsers()->where('telegram_user_peer_id', 5000)->sole()->state)->toBeNull();
+    expect($this->bot->botUsers()->where('telegram_user_peer_id', 5000)->sole()->privateConversation()->state)->toBeNull();
 });
 
 it('writes suspension changes to the audit channel, naming the target', function () {
