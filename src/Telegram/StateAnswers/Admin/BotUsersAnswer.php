@@ -43,7 +43,7 @@ class BotUsersAnswer extends StateAnswer
 
         $data = BotUsersFeature::menu(intval($page), sort: $sort, direction: $direction);
 
-        wHook()->user()->changeState();
+        wHook()->conversation()->changeState();
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => "Page $page loaded",
@@ -72,7 +72,7 @@ class BotUsersAnswer extends StateAnswer
         $botUser = BotUser::query()->findOrFail($bot_user_id);
         $data = BotUsersFeature::userActionsHistory($botUser, intval($page));
 
-        wHook()->user()->changeState();
+        wHook()->conversation()->changeState();
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_page_loaded', [
@@ -103,7 +103,7 @@ class BotUsersAnswer extends StateAnswer
 
         $data = BotUsersFeature::allActionsHistory(intval($page), lastPage: $last_page, sort: $sort, direction: $direction);
 
-        wHook()->user()->changeState();
+        wHook()->conversation()->changeState();
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_page_loaded', [
