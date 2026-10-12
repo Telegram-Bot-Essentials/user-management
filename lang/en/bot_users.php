@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'permission' => 'View and manage bot users',
     'main' => [
         'text' => [
             'sort_menu' => 'Sort by:',
@@ -11,8 +12,6 @@ return [
             ."👥 Users\r\n"
             ."Total: :total\r\n"
             ."Suspended: :suspended\r\n"
-            ."Admins: :admins\r\n"
-            ."Moderators: :moderators\r\n"
             ."\r\n"
             ."📈 Joined\r\n"
             ."Last 24h: :joinedDay\r\n"
@@ -37,7 +36,6 @@ return [
                 ."Telegram Last Name: :userLastName\r\n"
                 ."Telegram phone number: :userTel\r\n"
                 ."\r\n"
-                ."Role: :userRole\r\n"
                 ."Status: :userSuspendStatus\r\n"
                 ."Reachability: :userReachability\r\n"
                 ."Joined: :userCreatedAt\r\n"
@@ -62,7 +60,6 @@ return [
             'user' => ':fullName :suspendStatus - :credit',
             'userIsActive' => '✅ User is active',
             'userIsSuspended' => '⛔️ User is suspended',
-            'userRole' => '💪 Role: :role',
             'userUpdateData' => '♻️ Update',
             'setUserBalance' => '💵 Set balance',
             'addUserBalance' => '💸 Add balance',
