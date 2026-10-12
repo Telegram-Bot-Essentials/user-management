@@ -87,7 +87,7 @@ class BotUsersQuery extends CallbackQuery
     {
         $messageMeta = MessageMeta::makeWithCurrentMessage();
         $messageMeta->lockAction('Waiting for page number');
-        wHook()->user()->changeState(encodeAnswerState($this->type, 'setMenuPage', [
+        wHook()->conversation()->changeState(encodeAnswerState($this->type, 'setMenuPage', [
             'message_meta_id' => $messageMeta->id,
             'sort' => $sort,
             'direction' => botUserSorts()->resolveDirection($direction),
@@ -146,7 +146,7 @@ class BotUsersQuery extends CallbackQuery
     {
         $messageMeta = MessageMeta::makeWithCurrentMessage();
         $messageMeta->lockAction(__('tbe-user-management::bot_users.main.text.user_actions_history_waiting_page'));
-        wHook()->user()->changeState(encodeAnswerState($this->type, 'actionsSetPage', [
+        wHook()->conversation()->changeState(encodeAnswerState($this->type, 'actionsSetPage', [
             'message_meta_id' => $messageMeta->id,
             'bot_user_id' => $botUser->id,
         ]));
@@ -186,7 +186,7 @@ class BotUsersQuery extends CallbackQuery
         $direction = botUserSorts()->resolveDirection($direction);
         $messageMeta = MessageMeta::makeWithCurrentMessage();
         $messageMeta->lockAction(__('tbe-user-management::bot_users.main.text.user_actions_history_waiting_page'));
-        wHook()->user()->changeState(encodeAnswerState($this->type, 'allActionsSetPage', [
+        wHook()->conversation()->changeState(encodeAnswerState($this->type, 'allActionsSetPage', [
             'message_meta_id' => $messageMeta->id,
             'last_page' => $lastPage,
             'sort' => $sort,
