@@ -4,7 +4,6 @@ namespace TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Telegram\Bot\Exceptions\TelegramSDKException;
-use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
@@ -17,7 +16,7 @@ class BotUsersQuery extends CallbackQuery
 {
     protected string $type = 'BOTUSERS';
 
-    protected int $perm = Roles::ADMIN->value;
+    protected ?string $permission = 'user-management.users.manage';
 
     /**
      * @throws InvalidPageNumber
@@ -96,7 +95,7 @@ class BotUsersQuery extends CallbackQuery
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => 'Enter page number:',
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
     }
 
@@ -105,30 +104,6 @@ class BotUsersQuery extends CallbackQuery
      */
     public function show(BotUser $botUser): void
     {
-        BotUsersFeature::show($botUser)->update();
-    }
-
-    /**
-     * @throws TelegramSDKException
-     */
-    public function role(BotUser $botUser): void
-    {
-        $roles = array_map(fn ($role) => $role->value, Roles::cases());
-        $next = nextInArray($roles, $botUser->power);
-        $previousPower = $botUser->power;
-        $botUser->power = $next ?? 0;
-        $botUser->save();
-
-        tbeLog('user-management')->audit(
-            'Changed role of '.$this->describe($botUser).': '.$this->roleName($previousPower).' -> '.$this->roleName($botUser->power),
-            [
-                'target_bot_user_id' => $botUser->getKey(),
-                'target_user_id' => $botUser->getAttribute('telegram_user_peer_id'),
-                'previous_power' => $previousPower,
-                'new_power' => $botUser->power,
-            ],
-        );
-
         BotUsersFeature::show($botUser)->update();
     }
 
@@ -178,7 +153,7 @@ class BotUsersQuery extends CallbackQuery
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_enter_page'),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
     }
 
@@ -220,7 +195,7 @@ class BotUsersQuery extends CallbackQuery
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_enter_page'),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
     }
 
@@ -232,12 +207,5 @@ class BotUsersQuery extends CallbackQuery
         $username = $telegramUser instanceof TelegramUser ? $telegramUser->username : null;
 
         return 'user#'.(is_scalar($peerId) ? $peerId : '?').($username ? ' @'.$username : '');
-    }
-
-    private function roleName(mixed $power): string
-    {
-        $role = is_numeric($power) ? Roles::tryFrom((int) $power) : null;
-
-        return $role ? strtolower($role->name) : 'power '.(is_scalar($power) ? $power : '?');
     }
 }
