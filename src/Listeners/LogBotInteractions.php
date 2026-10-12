@@ -42,10 +42,10 @@ class LogBotInteractions
 
     private function processMessageUpdate(): void
     {
-        if (is_null(wHook()->user()->state)) {
+        if (is_null(wHook()->conversation()->state)) {
             $userState = null;
         } else {
-            $decodedAnswerState = decodeAnswerState(wHook()->user()->state);
+            $decodedAnswerState = decodeAnswerState(wHook()->conversation()->state);
             $userState = $decodedAnswerState['type'].'->'.$decodedAnswerState['method'];
         }
 
