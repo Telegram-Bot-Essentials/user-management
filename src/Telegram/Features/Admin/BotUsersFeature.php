@@ -3,7 +3,6 @@
 namespace TelegramBotEssentials\UserManagement\Telegram\Features\Admin;
 
 use Telegram\Bot\Keyboard\Keyboard;
-use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Services\TelegramPaginator;
@@ -120,8 +119,6 @@ class BotUsersFeature
         $text = self::markLtr(__('tbe-user-management::bot_users.main.text.index', [
             'total' => number_format($counts->total),
             'suspended' => number_format($counts->suspended),
-            'admins' => number_format($counts->admins),
-            'moderators' => number_format($counts->moderators),
             'joinedDay' => number_format($counts->joined_day),
             'joinedWeek' => number_format($counts->joined_week),
             'joinedMonth' => number_format($counts->joined_month),
@@ -160,8 +157,6 @@ class BotUsersFeature
             ->leftJoin('telegram_users', 'bot_users.telegram_user_peer_id', '=', 'telegram_users.peer_id')
             ->selectRaw('COUNT(*) as total')
             ->selectRaw('SUM(CASE WHEN bot_users.suspended_at IS NOT NULL THEN 1 ELSE 0 END) as suspended')
-            ->selectRaw('SUM(CASE WHEN bot_users.power = ? THEN 1 ELSE 0 END) as admins', [Roles::ADMIN->value])
-            ->selectRaw('SUM(CASE WHEN bot_users.power = ? THEN 1 ELSE 0 END) as moderators', [Roles::MODERATOR->value])
             ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_day', [$day])
             ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_week', [$week])
             ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_month', [$month])
@@ -292,7 +287,6 @@ class BotUsersFeature
             'userFirstName' => $botUser->telegramUser->first_name,
             'userLastName' => $botUser->telegramUser->last_name,
             'userTel' => $botUser->telegramUser->tel,
-            'userRole' => $botUser->role,
             'userSuspendStatus' => $botUser->suspend ?
                 __('tbe::general.status.suspended', [
                     'suspendedDate' => $botUser->suspended_at?->format('Y-m-d H:i:s'),
@@ -313,10 +307,6 @@ class BotUsersFeature
         ]);
 
         $replyMarkup->row([
-            Keyboard::inlineButton([
-                'text' => __('tbe-user-management::bot_users.main.keys.userRole', ['role' => $botUser->role]),
-                'callback_data' => encodeCallback(self::$type, 'role', [$botUser->id]),
-            ]),
             Keyboard::inlineButton([
                 'text' => __('tbe-user-management::bot_users.main.keys.userUpdateData'),
                 'callback_data' => encodeCallback(self::$type, 'show', [$botUser->id]),
