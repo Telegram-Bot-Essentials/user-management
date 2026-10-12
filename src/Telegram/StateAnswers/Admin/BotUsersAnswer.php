@@ -5,7 +5,6 @@ namespace TelegramBotEssentials\UserManagement\Telegram\StateAnswers\Admin;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use TelegramBotEssentials\Essence\Enums\AllowableFields;
-use TelegramBotEssentials\Essence\Enums\Roles;
 use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
@@ -18,7 +17,7 @@ class BotUsersAnswer extends StateAnswer
 {
     protected string $type = 'BOTUSERS';
 
-    protected int $perm = Roles::ADMIN->value;
+    protected ?string $permission = 'user-management.users.manage';
 
     protected array $allowedFields = [
         AllowableFields::TEXT->value,
@@ -48,7 +47,7 @@ class BotUsersAnswer extends StateAnswer
         wHook()->api()->sendMessage([
             'chat_id' => wHook()->user()->telegramUser->peer_id,
             'text' => "Page $page loaded",
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
 
         $this->requireMessageMeta()->updateAndContinueAction($data);
@@ -79,7 +78,7 @@ class BotUsersAnswer extends StateAnswer
             'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_page_loaded', [
                 'page' => $page,
             ]),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
 
         $this->requireMessageMeta()->updateAndContinueAction($data);
@@ -110,7 +109,7 @@ class BotUsersAnswer extends StateAnswer
             'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_page_loaded', [
                 'page' => $page,
             ]),
-            'reply_markup' => wHook()->user()->getKeyboard(),
+            'reply_markup' => replyKeyboard(),
         ]);
 
         $this->requireMessageMeta()->updateAndContinueAction($data);
