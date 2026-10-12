@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'permission' => 'مشاهده و مدیریت کاربران ربات',
     'main' => [
         'text' => [
             'sort_menu' => 'روش مرتب‌سازی را انتخاب کنید:',
@@ -11,8 +12,6 @@ return [
                 ."👥 کاربران\r\n"
                 ."کل: :total\r\n"
                 ."معلق: :suspended\r\n"
-                ."ادمین: :admins\r\n"
-                ."ناظر: :moderators\r\n"
                 ."\r\n"
                 ."📈 عضویت\r\n"
                 ."24 ساعت گذشته: :joinedDay\r\n"
@@ -37,7 +36,6 @@ return [
                 ."نام خانوادگی تلگرام: :userLastName\r\n"
                 ."شماره تلفن تلگرام: :userTel\r\n"
                 ."\r\n"
-                ."نقش: :userRole\r\n"
                 ."وضعیت: :userSuspendStatus\r\n"
                 ."دسترسی‌پذیری: :userReachability\r\n"
                 ."تاریخ عضویت: :userCreatedAt\r\n"
@@ -62,7 +60,6 @@ return [
             'user' => ':fullName :suspendStatus - :credit',
             'userIsActive' => '✅ کاربر فعال است',
             'userIsSuspended' => '⛔️ کاربر تعلیق شده است',
-            'userRole' => '💪 نقش: :role',
             'userUpdateData' => '♻️ به‌روزرسانی',
             'setUserBalance' => '💵 تنظیم اعتبار',
             'addUserBalance' => '💸 افزایش اعتبار',
