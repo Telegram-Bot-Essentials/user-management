@@ -6,6 +6,19 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+Requires essence 0.17, which replaces power levels with named permissions.
+
+### Changed
+
+- The bot users screens ask for the `user-management.users.manage`
+  permission, registered with essence's permission registry.
+
+### Removed
+
+- The role button on a user's profile, its `role` callback, the "Role:" line
+  and the admin and moderator counts: power levels no longer exist. Roles are
+  managed by tbe-access, which adds its own button to the profile.
+
 ## [0.0.23] - 2026-10-01
 
 ### Changed

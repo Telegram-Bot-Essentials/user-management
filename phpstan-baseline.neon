@@ -457,12 +457,6 @@ parameters:
 			path: src/TbeUserManagementServiceProvider.php
 
 		-
-			message: '#^Access to an undefined property TelegramBotEssentials\\Essence\\Models\\BotUser\:\:\$power\.$#'
-			identifier: property.notFound
-			count: 3
-			path: src/Telegram/CallbackQueries/Admin/BotUsersQuery.php
-
-		-
 			message: '#^Cannot access property \$peer_id on Illuminate\\Database\\Eloquent\\Model\|null\.$#'
 			identifier: property.nonObject
 			count: 3
@@ -559,12 +553,6 @@ parameters:
 			path: src/Telegram/Features/Admin/BotUsersFeature.php
 
 		-
-			message: '#^Access to an undefined property object\:\:\$admins\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Telegram/Features/Admin/BotUsersFeature.php
-
-		-
 			message: '#^Access to an undefined property object\:\:\$blocked\.$#'
 			identifier: property.notFound
 			count: 1
@@ -590,12 +578,6 @@ parameters:
 
 		-
 			message: '#^Access to an undefined property object\:\:\$joined_week\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Telegram/Features/Admin/BotUsersFeature.php
-
-		-
-			message: '#^Access to an undefined property object\:\:\$moderators\.$#'
 			identifier: property.notFound
 			count: 1
 			path: src/Telegram/Features/Admin/BotUsersFeature.php
@@ -831,7 +813,7 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$num of function number_format expects float, mixed given\.$#'
 			identifier: argument.type
-			count: 14
+			count: 12
 			path: src/Telegram/Features/Admin/BotUsersFeature.php
 
 		-
@@ -859,7 +841,7 @@ parameters:
 			path: src/Telegram/Features/Admin/BotUsersFeature.php
 
 		-
-			message: '#^Parameter \#2 \$replace of function __ expects array\<string, bool\|\(Closure\(string\)\: string\)\|float\|int\|string\|null\>, array\{userFullName\: non\-falsy\-string, userPeerId\: mixed, userUsername\: string, userFirstName\: mixed, userLastName\: mixed, userTel\: mixed, userRole\: string, userSuspendStatus\: \(array\|string\), \.\.\.\} given\.$#'
+			message: '#^Parameter \#2 \$replace of function __ expects array\<string, bool\|\(Closure\(string\)\: string\)\|float\|int\|string\|null\>, array\{userFullName\: non\-falsy\-string, userPeerId\: mixed, userUsername\: string, userFirstName\: mixed, userLastName\: mixed, userTel\: mixed, userSuspendStatus\: \(array\|string\), userReachability\: string, \.\.\.\} given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Telegram/Features/Admin/BotUsersFeature.php
