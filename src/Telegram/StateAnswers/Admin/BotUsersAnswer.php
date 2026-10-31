@@ -17,7 +17,7 @@ class BotUsersAnswer extends StateAnswer
 {
     protected string $type = 'BOTUSERS';
 
-    protected ?string $permission = 'user-management.users.manage';
+    protected ?string $ability = 'user-management.users.manage';
 
     protected array $allowedFields = [
         AllowableFields::TEXT->value,
