@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'permission' => 'View and manage bot users',
     'main' => [
         'text' => [
             'sort_menu' => 'Sort by:',
