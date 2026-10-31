@@ -55,12 +55,6 @@ class TbeUserManagementServiceProvider extends ServiceProvider
     {
         $this->registerDefaultSorts();
         $this->registerDefaultFilters();
-
-        permissionRegistry()->register(
-            'user-management.users.manage',
-            fn () => __('tbe-user-management::bot_users.permission'),
-            'user-management',
-        );
     }
 
     protected function registerPublishing(): void
