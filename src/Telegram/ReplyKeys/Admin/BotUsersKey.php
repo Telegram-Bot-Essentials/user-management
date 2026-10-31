@@ -9,7 +9,7 @@ use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature
 
 class BotUsersKey extends ReplyKey
 {
-    protected ?string $permission = 'user-management.users.manage';
+    protected ?string $ability = 'user-management.users.manage';
 
     protected function text(): string
     {
