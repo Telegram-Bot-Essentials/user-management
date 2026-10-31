@@ -16,7 +16,7 @@ class BotUsersQuery extends CallbackQuery
 {
     protected string $type = 'BOTUSERS';
 
-    protected ?string $permission = 'user-management.users.manage';
+    protected ?string $ability = 'user-management.users.manage';
 
     /**
      * @throws InvalidPageNumber
