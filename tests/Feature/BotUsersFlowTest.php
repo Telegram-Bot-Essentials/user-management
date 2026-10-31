@@ -58,7 +58,7 @@ it('resolves the reply-key label lazily too', function () {
     app()->setLocale('fa');
     expect($key->getText())->toBe('کاربران ربات 👥');
 
-    expect($key->getPermission())->toBe('user-management.users.manage');
+    expect($key->getAbility())->toBe('user-management.users.manage');
 });
 
 it('tells an admin the step expired when the message meta was pruned mid-flow', function () {
