@@ -27,5 +27,5 @@ it('registers the default sorts', function () {
 
 it('registers the default filters, keeping each failure state distinct', function () {
     expect(botUserFilters()->getFilters()->keys()->all())
-        ->toEqualCanonicalizing(['all', 'reachable', 'blocked', 'unreachable', 'deactivated']);
+        ->toEqualCanonicalizing(['all', 'reachable', 'group_only', 'blocked', 'unreachable', 'deactivated']);
 });

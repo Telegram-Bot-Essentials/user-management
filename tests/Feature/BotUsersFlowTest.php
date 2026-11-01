@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Monolog\Handler\TestHandler;
 use TelegramBotEssentials\Essence\Events\BotUserStatusChanged;
 use TelegramBotEssentials\Essence\Models\BotUser;
+use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature;
 use TelegramBotEssentials\UserManagement\Telegram\ReplyKeys\Admin\BotUsersKey;
 
 beforeEach(function () {
@@ -122,4 +123,30 @@ it('writes each recorded action to the activity channel too', function () {
         ->and($messages[0])->toContain('user#6000')
         ->and($messages[0])->toEndWith('(BOTUSERS->suspend)')
         ->and($messages[1])->toEndWith('| bot_user_status: reachable -> blocked (update)');
+});
+
+it('finds users met only in a group, and does not call them reachable', function () {
+    $this->bot ??= $this->makeBot();
+    $groupOnly = $this->makeBotUser($this->bot, 9001);
+    $groupOnly->forceFill(['has_private_chat' => false])->save();
+    $normal = $this->makeBotUser($this->bot, 9002);
+
+    $groupOnly = BotUser::findOrFail($groupOnly->id);
+
+    expect(botUserFilters()->apply('group_only', BotUser::query())->pluck('id')->all())->toBe([$groupOnly->id])
+        ->and(botUserFilters()->apply('reachable', BotUser::query())->pluck('id')->all())->toBe([$normal->id])
+        ->and(BotUsersFeature::reachabilityEmoji($groupOnly))->toBe('👥')
+        ->and(BotUsersFeature::reachabilityLabel($groupOnly))->toBe(__('tbe-user-management::bot_users.reachability.group_only'));
+});
+
+it('counts group-only users apart from reachable ones in the summary', function () {
+    $this->bot ??= $this->makeBot();
+    $this->makeBotUser($this->bot, 9001)->forceFill(['has_private_chat' => false])->save();
+    $this->makeBotUser($this->bot, 9002);
+
+    $method = new ReflectionMethod(BotUsersFeature::class, 'userCounts');
+    $counts = $method->invoke(null);
+
+    expect((int) $counts->reachable)->toBe(1)
+        ->and((int) $counts->group_only)->toBe(1);
 });
