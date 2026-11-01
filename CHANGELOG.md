@@ -6,6 +6,11 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+### Added
+
+- A "Group only" filter, summary count and label for users met only in a group.
+  They no longer count as reachable. Needs essence's `has_private_chat`.
+
 ## [0.0.28] - 2026-11-01
 
 ### Added
