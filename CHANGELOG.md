@@ -6,6 +6,8 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.29] - 2026-11-01
+
 ### Added
 
 - A "Group only" filter, summary count and label for users met only in a group.
