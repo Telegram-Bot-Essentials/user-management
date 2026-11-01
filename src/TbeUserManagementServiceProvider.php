@@ -3,6 +3,7 @@
 namespace TelegramBotEssentials\UserManagement;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\ServiceProvider;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
@@ -120,6 +121,12 @@ class TbeUserManagementServiceProvider extends ServiceProvider
             key: 'reachable',
             label: fn () => __('tbe-user-management::bot_users.filters.reachable'),
             apply: fn ($query) => $query->reachable(),
+        ));
+
+        botUserFilters()->addFilter(new BotUserFilter(
+            key: 'group_only',
+            label: fn () => __('tbe-user-management::bot_users.filters.group_only'),
+            apply: fn (Builder $query) => $query->where('has_private_chat', false),
         ));
 
         botUserFilters()->addFilter(new BotUserFilter(
