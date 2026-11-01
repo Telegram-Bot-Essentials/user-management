@@ -125,6 +125,7 @@ class BotUsersFeature
             'reachable' => number_format($counts->reachable),
             'blocked' => number_format($counts->blocked),
             'unreachable' => number_format($counts->unreachable),
+            'groupOnly' => number_format($counts->group_only),
             'deactivated' => number_format($counts->deactivated),
             'activeDay' => number_format($counts->active_day),
             'activeWeek' => number_format($counts->active_week),
@@ -160,7 +161,8 @@ class BotUsersFeature
             ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_day', [$day])
             ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_week', [$week])
             ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_month', [$month])
-            ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? THEN 1 ELSE 0 END) as reachable', [BotUser::STATUS_ACTIVE])
+            ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? AND bot_users.has_private_chat = 1 THEN 1 ELSE 0 END) as reachable', [BotUser::STATUS_ACTIVE])
+            ->selectRaw('SUM(CASE WHEN bot_users.has_private_chat = 0 THEN 1 ELSE 0 END) as group_only')
             ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? THEN 1 ELSE 0 END) as blocked', [BotUser::STATUS_BLOCKED])
             ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? THEN 1 ELSE 0 END) as unreachable', [BotUser::STATUS_UNREACHABLE])
             ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NOT NULL THEN 1 ELSE 0 END) as deactivated')
@@ -197,6 +199,10 @@ class BotUsersFeature
      */
     public static function reachabilityEmoji(BotUser $botUser): string
     {
+        if ($botUser->has_private_chat === false) {
+            return '👥';
+        }
+
         return match ($botUser->reachability()) {
             BotUser::STATUS_BLOCKED => '🚫',
             BotUser::STATUS_UNREACHABLE => '❓',
@@ -207,6 +213,10 @@ class BotUsersFeature
 
     public static function reachabilityLabel(BotUser $botUser): string
     {
+        if ($botUser->has_private_chat === false) {
+            return __('tbe-user-management::bot_users.reachability.group_only');
+        }
+
         return __('tbe-user-management::bot_users.reachability.'.$botUser->reachability());
     }
 
