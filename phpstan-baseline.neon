@@ -175,6 +175,18 @@ parameters:
 			path: src/Listeners/LogBotUserStatusChanges.php
 
 		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$peer_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/BotUserAction.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: src/Models/BotUserAction.php
+
+		-
 			message: '#^Method TelegramBotEssentials\\UserManagement\\Models\\BotUserAction\:\:bot\(\) return type with generic class Illuminate\\Database\\Eloquent\\Relations\\BelongsTo does not specify its types\: TRelatedModel, TDeclaringModel$#'
 			identifier: missingType.generics
 			count: 1
