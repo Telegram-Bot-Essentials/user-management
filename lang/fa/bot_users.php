@@ -21,6 +21,7 @@ return [
                 ."در دسترس: :reachable\r\n"
                 ."بلاک کرده: :blocked\r\n"
                 ."در دسترس نیست: :unreachable\r\n"
+                ."فقط گروه: :groupOnly\r\n"
                 ."حذف‌شده: :deactivated\r\n"
                 ."\r\n"
                 ."⚡️ فعالیت\r\n"
@@ -75,12 +76,14 @@ return [
     'filters' => [
         'all' => 'همه کاربران',
         'reachable' => 'در دسترس',
+        'group_only' => 'فقط گروه',
         'blocked' => 'ربات را بلاک کرده',
         'unreachable' => 'در دسترس نیست',
         'deactivated' => 'اکانت حذف‌شده',
     ],
     'reachability' => [
         'active' => 'در دسترس',
+        'group_only' => 'فقط گروه',
         'blocked' => 'ربات را بلاک کرده',
         'unreachable' => 'در دسترس نیست',
         'deactivated' => 'اکانت حذف‌شده',
