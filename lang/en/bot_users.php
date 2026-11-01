@@ -21,6 +21,7 @@ return [
             ."Reachable: :reachable\r\n"
             ."Blocked: :blocked\r\n"
             ."Unreachable: :unreachable\r\n"
+            ."Group only: :groupOnly\r\n"
             ."Deleted: :deactivated\r\n"
             ."\r\n"
             ."⚡️ Activity\r\n"
@@ -75,12 +76,14 @@ return [
     'filters' => [
         'all' => 'All users',
         'reachable' => 'Reachable',
+        'group_only' => 'Group only',
         'blocked' => 'Blocked the bot',
         'unreachable' => 'Unreachable',
         'deactivated' => 'Deleted account',
     ],
     'reachability' => [
         'active' => 'Reachable',
+        'group_only' => 'Group only',
         'blocked' => 'Blocked the bot',
         'unreachable' => 'Unreachable',
         'deactivated' => 'Deleted account',
