@@ -112,7 +112,7 @@ class BotUsersFeature
      * The header of the user list: the state of the user base, followed by
      * whatever other packages have registered about it.
      */
-    private static function statsText(): string
+    public static function statsText(): string
     {
         $counts = self::userCounts();
 
