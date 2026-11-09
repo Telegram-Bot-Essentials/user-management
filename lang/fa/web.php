@@ -7,7 +7,6 @@ return [
     'reachability' => 'دسترسی',
     'suspended' => 'تعلیق',
     'segment' => 'نمایش',
-    'overview' => 'خلاصه',
     'username' => 'نام کاربری',
     'peer_id' => 'شناسهٔ تلگرام',
     'phone' => 'تلفن',
@@ -25,4 +24,15 @@ return [
     'unsuspend_confirm' => 'کاربر دوباره می‌تواند از ربات استفاده کند.',
     'suspended_done' => 'کاربر تعلیق شد.',
     'unsuspended_done' => 'تعلیق برداشته شد.',
+    'stats' => [
+        'members' => 'کاربران',
+        'joined' => ':day نفر امروز · :month نفر این ماه',
+        'active_week' => 'فعال در این هفته',
+        'active_detail' => ':day امروز · :month این ماه',
+        'reachable' => 'در دسترس',
+        'of_members' => ':count کاربر',
+        'blocked' => 'ربات را مسدود کرده‌اند',
+        'reachability' => 'پیام به چه کسانی می‌رسد',
+        'actions_per_day' => 'کارها در هر روز',
+    ],
 ];
