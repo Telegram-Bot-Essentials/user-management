@@ -17,6 +17,7 @@ class UserSection
         public ?Closure $target = null,
         public ?Closure $content = null,
         public bool|Closure $active = true,
+        public ?Closure $webUrl = null,
     ) {
         if ($this->mode === SectionMode::BUTTON && ! $this->target) {
             throw new TbeException("User section \"{$this->key}\" is in Button mode but has no target closure");
@@ -42,6 +43,22 @@ class UserSection
     public function targetFor(BotUser $user): string
     {
         return ($this->target)($user);
+    }
+
+    /**
+     * Where this section opens in the web panel, or null when it has no
+     * screen there; the panel then shows the label alone. Called only while
+     * the panel renders, so the closure may use Filament.
+     */
+    public function webUrlFor(BotUser $user): ?string
+    {
+        if ($this->webUrl === null) {
+            return null;
+        }
+
+        $url = ($this->webUrl)($user);
+
+        return is_string($url) && $url !== '' ? $url : null;
     }
 
     public function contentFor(BotUser $user): array
