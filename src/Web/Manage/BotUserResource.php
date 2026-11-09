@@ -15,6 +15,7 @@ use TelegramBotEssentials\Essence\Web\Filament\PanelResource;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserFilter;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
 use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature;
+use TelegramBotEssentials\UserManagement\Web\Widgets\MemberStats;
 
 /**
  * The bot's members. Filters and sorts come from the same registries as the
@@ -135,6 +136,11 @@ class BotUserResource extends PanelResource
             BotUser::STATUS_BLOCKED => 'danger',
             default => 'warning',
         };
+    }
+
+    public static function getWidgets(): array
+    {
+        return [MemberStats::class];
     }
 
     public static function getPages(): array

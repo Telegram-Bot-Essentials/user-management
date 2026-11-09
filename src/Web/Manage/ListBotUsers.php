@@ -3,10 +3,8 @@
 namespace TelegramBotEssentials\UserManagement\Web\Manage;
 
 use Filament\Resources\Pages\ListRecords;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\View;
 use TelegramBotEssentials\Essence\Web\Filament\Concerns\GuardsResourcePage;
-use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature;
+use TelegramBotEssentials\UserManagement\Web\Widgets\MemberStats;
 
 class ListBotUsers extends ListRecords
 {
@@ -14,15 +12,9 @@ class ListBotUsers extends ListRecords
 
     protected static string $resource = BotUserResource::class;
 
-    /** The bot list's header: the user base, then what other packages report about it. */
-    public function getHeader(): ?View
+    protected function getHeaderWidgets(): array
     {
-        return view('tbe-user-management::web.stats', ['html' => self::telegramHtml(BotUsersFeature::statsText())]);
-    }
-
-    public function getHeading(): string|Htmlable
-    {
-        return BotUserResource::getPluralModelLabel();
+        return [MemberStats::class];
     }
 
     /**
