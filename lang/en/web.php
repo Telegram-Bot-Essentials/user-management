@@ -7,7 +7,6 @@ return [
     'reachability' => 'Reachable',
     'suspended' => 'Suspended',
     'segment' => 'Show',
-    'overview' => 'Overview',
     'username' => 'Username',
     'peer_id' => 'Telegram ID',
     'phone' => 'Phone',
@@ -25,4 +24,15 @@ return [
     'unsuspend_confirm' => 'The user can use the bot again.',
     'suspended_done' => 'User suspended.',
     'unsuspended_done' => 'Suspension lifted.',
+    'stats' => [
+        'members' => 'Members',
+        'joined' => ':day joined today · :month this month',
+        'active_week' => 'Active this week',
+        'active_detail' => ':day today · :month this month',
+        'reachable' => 'Reachable',
+        'of_members' => ':count members',
+        'blocked' => 'Blocked the bot',
+        'reachability' => 'Who a message reaches',
+        'actions_per_day' => 'Actions per day',
+    ],
 ];
