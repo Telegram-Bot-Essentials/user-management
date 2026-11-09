@@ -8,8 +8,8 @@ use TelegramBotEssentials\Essence\Exceptions\InvalidPageNumber;
 use TelegramBotEssentials\Essence\Exceptions\LogicException;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Models\MessageMeta;
-use TelegramBotEssentials\Essence\Models\TelegramUser;
 use TelegramBotEssentials\Essence\Telegram\CallbackQueries\CallbackQuery;
+use TelegramBotEssentials\UserManagement\Services\Suspensions;
 use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature;
 
 class BotUsersQuery extends CallbackQuery
@@ -112,13 +112,7 @@ class BotUsersQuery extends CallbackQuery
      */
     public function suspend(BotUser $botUser, bool $suspend): void
     {
-        $botUser->suspend = $suspend;
-        $botUser->save();
-
-        tbeLog('user-management')->audit(($suspend ? 'Suspended ' : 'Unsuspended ').$this->describe($botUser), [
-            'target_bot_user_id' => $botUser->getKey(),
-            'target_user_id' => $botUser->getAttribute('telegram_user_peer_id'),
-        ]);
+        app(Suspensions::class)->set($botUser, $suspend);
 
         BotUsersFeature::show($botUser)->update();
     }
@@ -197,15 +191,5 @@ class BotUsersQuery extends CallbackQuery
             'text' => __('tbe-user-management::bot_users.main.text.user_actions_history_enter_page'),
             'reply_markup' => replyKeyboard(),
         ]);
-    }
-
-    /** "user#12345 @alice", the target of an admin action as it reads in the audit log. */
-    private function describe(BotUser $botUser): string
-    {
-        $peerId = $botUser->getAttribute('telegram_user_peer_id');
-        $telegramUser = $botUser->telegramUser;
-        $username = $telegramUser instanceof TelegramUser ? $telegramUser->username : null;
-
-        return 'user#'.(is_scalar($peerId) ? $peerId : '?').($username ? ' @'.$username : '');
     }
 }
