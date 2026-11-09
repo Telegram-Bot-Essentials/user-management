@@ -9,11 +9,12 @@ use TelegramBotEssentials\UserManagement\DTOs\UserSection;
 
 class UserManagementSections
 {
+    /** @var Collection<string, UserSection> */
     private Collection $sections;
 
     public function __construct()
     {
-        $this->sections = collect();
+        $this->sections = new Collection;
     }
 
     public function addSection(UserSection $section): void
@@ -25,6 +26,7 @@ class UserManagementSections
         $this->sections->put($section->key, $section);
     }
 
+    /** @return Collection<int, UserSection> */
     public function getSectionsFor(BotUser $user): Collection
     {
         return $this->sections

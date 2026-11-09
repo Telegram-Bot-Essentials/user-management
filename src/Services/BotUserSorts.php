@@ -8,11 +8,12 @@ use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
 
 class BotUserSorts
 {
+    /** @var Collection<string, BotUserSort> */
     private Collection $sorts;
 
     public function __construct()
     {
-        $this->sorts = collect();
+        $this->sorts = new Collection;
     }
 
     public function addSort(BotUserSort $sort): void
@@ -20,6 +21,7 @@ class BotUserSorts
         $this->sorts->put($sort->key, $sort);
     }
 
+    /** @return Collection<string, BotUserSort> */
     public function getSorts(): Collection
     {
         return $this->sorts->filter(fn (BotUserSort $sort) => $sort->isActive());
@@ -34,7 +36,7 @@ class BotUserSorts
 
     public function getDefaultKey(): string
     {
-        $default = config('tbe-user-management.default_sort', 'last_interaction');
+        $default = config()->string('tbe-user-management.default_sort', 'last_interaction');
         $active = $this->getSorts();
 
         return $active->has($default) ? $default : $active->keys()->first() ?? 'last_interaction';

@@ -16,11 +16,12 @@ use TelegramBotEssentials\UserManagement\DTOs\BotUserFilter;
  */
 class BotUserFilters
 {
+    /** @var Collection<string, BotUserFilter> */
     private Collection $filters;
 
     public function __construct()
     {
-        $this->filters = collect();
+        $this->filters = new Collection;
     }
 
     public function addFilter(BotUserFilter $filter): void
@@ -28,6 +29,7 @@ class BotUserFilters
         $this->filters->put($filter->key, $filter);
     }
 
+    /** @return Collection<string, BotUserFilter> */
     public function getFilters(): Collection
     {
         return $this->filters->filter(fn (BotUserFilter $filter) => $filter->isActive());
@@ -42,7 +44,7 @@ class BotUserFilters
 
     public function getDefaultKey(): string
     {
-        $default = config('tbe-user-management.default_filter', 'all');
+        $default = config()->string('tbe-user-management.default_filter', 'all');
         $active = $this->getFilters();
 
         return $active->has($default) ? $default : $active->keys()->first() ?? 'all';
