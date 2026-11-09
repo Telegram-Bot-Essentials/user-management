@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'nav_users' => 'کاربران',
+    'nav_activity' => 'فعالیت‌ها',
+    'user' => 'کاربر',
+    'reachability' => 'دسترسی',
+    'suspended' => 'تعلیق',
+    'segment' => 'نمایش',
+    'overview' => 'خلاصه',
+    'username' => 'نام کاربری',
+    'peer_id' => 'شناسهٔ تلگرام',
+    'phone' => 'تلفن',
+    'no' => 'خیر',
+    'suspended_since' => 'بله، :time',
+    'more' => 'بیشتر',
+    'history' => 'فعالیت‌ها',
+    'action' => 'کار',
+    'update_type' => 'نوع',
+    'state' => 'مرحله',
+    'when' => 'زمان',
+    'suspend' => 'تعلیق',
+    'unsuspend' => 'رفع تعلیق',
+    'suspend_confirm' => 'کاربر تعلیق‌شده دیگر نمی‌تواند از ربات استفاده کند.',
+    'unsuspend_confirm' => 'کاربر دوباره می‌تواند از ربات استفاده کند.',
+    'suspended_done' => 'کاربر تعلیق شد.',
+    'unsuspended_done' => 'تعلیق برداشته شد.',
+];
