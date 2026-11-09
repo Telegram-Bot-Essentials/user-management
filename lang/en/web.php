@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'nav_users' => 'Users',
+    'nav_activity' => 'Activity',
+    'user' => 'User',
+    'reachability' => 'Reachable',
+    'suspended' => 'Suspended',
+    'segment' => 'Show',
+    'overview' => 'Overview',
+    'username' => 'Username',
+    'peer_id' => 'Telegram ID',
+    'phone' => 'Phone',
+    'no' => 'No',
+    'suspended_since' => 'Yes, :time',
+    'more' => 'More',
+    'history' => 'Activity',
+    'action' => 'Action',
+    'update_type' => 'Type',
+    'state' => 'Step',
+    'when' => 'When',
+    'suspend' => 'Suspend',
+    'unsuspend' => 'Lift suspension',
+    'suspend_confirm' => 'A suspended user can no longer use the bot.',
+    'unsuspend_confirm' => 'The user can use the bot again.',
+    'suspended_done' => 'User suspended.',
+    'unsuspended_done' => 'Suspension lifted.',
+];
