@@ -17,6 +17,7 @@ use TelegramBotEssentials\UserManagement\Services\UserManagementStats;
 use TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin\BotUserActionsQuery;
 use TelegramBotEssentials\UserManagement\Telegram\CallbackQueries\Admin\BotUsersQuery;
 use TelegramBotEssentials\UserManagement\Telegram\StateAnswers\Admin\BotUsersAnswer;
+use TelegramBotEssentials\UserManagement\Web\UserManagementManagePlugin;
 
 class TbeUserManagementServiceProvider extends ServiceProvider
 {
@@ -33,11 +34,15 @@ class TbeUserManagementServiceProvider extends ServiceProvider
         $this->app->singleton(UserManagementSections::class, fn () => new UserManagementSections);
         $this->app->singleton(UserManagementStats::class, fn () => new UserManagementStats);
 
+        // Class names only: Filament is loaded only where the app installed it.
+        webPanels()->manage(UserManagementManagePlugin::class);
+
         $this->mergeConfigFrom(__DIR__.'/../config/tbe-user-management.php', 'tbe-user-management');
 
         $this->registerPublishing();
 
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'tbe-user-management');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'tbe-user-management');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->app->register(EventServiceProvider::class);
