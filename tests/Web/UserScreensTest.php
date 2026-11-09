@@ -9,11 +9,13 @@ use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Web\WebAccounts;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
 use TelegramBotEssentials\UserManagement\DTOs\UserSection;
-use TelegramBotEssentials\UserManagement\DTOs\UserStat;
 use TelegramBotEssentials\UserManagement\Enums\SectionMode;
 use TelegramBotEssentials\UserManagement\Models\BotUserAction;
 use TelegramBotEssentials\UserManagement\Web\Manage\ListBotUsers;
 use TelegramBotEssentials\UserManagement\Web\Manage\ViewBotUser;
+use TelegramBotEssentials\UserManagement\Web\Widgets\ActiveMembersChart;
+use TelegramBotEssentials\UserManagement\Web\Widgets\MemberStats;
+use TelegramBotEssentials\UserManagement\Web\Widgets\ReachabilityChart;
 
 beforeEach(function () {
     $this->bot = $this->makeBot(['bot_owner_peer_id' => 9401]);
@@ -33,7 +35,7 @@ it('lists this bot\'s members only, with the overview', function () {
         ->assertOk()
         ->assertSee('@member_one')
         ->assertDontSee('@outsider')
-        ->assertSee(__('tbe-user-management::web.overview'));
+        ->assertSee(__('tbe-user-management::web.stats.members'));
 });
 
 it('keeps the screens from anyone without the ability', function () {
@@ -69,10 +71,29 @@ it('turns a package\'s sort into a sortable column', function () {
         ->assertSee('peer 9402');
 });
 
-it('shows package stats safely, without their attributes', function () {
-    userManagementStats()->addStat(new UserStat(key: 'probe', order: 1, content: fn () => '<b onclick="steal()">Wallets</b>: 3'));
+it('keeps the Telegram HTML of sections safe, without attributes', function () {
+    expect(ListBotUsers::telegramHtml('<b onclick="steal()">Wallets</b>: 3 <a href="javascript:x()">no</a>'))
+        ->toBe('<b>Wallets</b>: 3 no');
+});
 
-    $this->get($this->url)->assertOk()->assertSee('<b>Wallets</b>: 3', false)->assertDontSee('steal()', false);
+it('charts reachability and actions on the dashboard', function () {
+    $this->member->update(['status' => BotUser::STATUS_BLOCKED]);
+    BotUserAction::query()->create(['bot_id' => $this->bot->id, 'bot_user_id' => $this->member->id, 'update_type' => 'message', 'action' => 'hi']);
+    $this->enterPanel('manage', $this->bot, $this->account);
+
+    $reach = Livewire::test(ReachabilityChart::class)->assertSee(__('tbe-user-management::web.stats.reachability'));
+    $data = (fn () => $this->getCachedData())->call($reach->instance());
+    expect($data['datasets'][0]['data'][2])->toBe(1);
+
+    $actions = Livewire::test(ActiveMembersChart::class);
+    expect(array_sum((fn () => $this->getCachedData())->call($actions->instance())['datasets'][0]['data']))->toBe(1.0);
+});
+
+it('hides the member widgets from who may not manage users', function () {
+    $limited = $this->grant($this->makeBotUser($this->bot, 9404), 'web.manage');
+    $this->enterPanel('manage', $this->bot, $this->panelAccount($limited));
+
+    expect(MemberStats::canView())->toBeFalse()->and(ReachabilityChart::canView())->toBeFalse();
 });
 
 it('shows the profile with sections, linking those that have a web screen', function () {
