@@ -148,7 +148,7 @@ class BotUsersFeature
      * deactivation lives there and outranks the per-bot status column, which
      * keeps the four reachability numbers mutually exclusive.
      */
-    private static function userCounts(): object
+    public static function userCounts(): object
     {
         $day = now()->subDay();
         $week = now()->subWeek();
