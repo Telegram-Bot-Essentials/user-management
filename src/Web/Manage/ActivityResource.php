@@ -8,8 +8,12 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use TelegramBotEssentials\Essence\Models\BotUser;
+use TelegramBotEssentials\Essence\Web\Filament\PanelDates;
+use TelegramBotEssentials\Essence\Web\Filament\PanelGroup;
+use TelegramBotEssentials\Essence\Web\Filament\PanelMembers;
 use TelegramBotEssentials\Essence\Web\Filament\PanelResource;
 use TelegramBotEssentials\UserManagement\Models\BotUserAction;
+use UnitEnum;
 
 /** Everything members did in the bot, newest first: the bot's "all actions" history. */
 class ActivityResource extends PanelResource
@@ -23,6 +27,8 @@ class ActivityResource extends PanelResource
     protected static ?string $tenantOwnershipRelationshipName = 'bot';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
+
+    protected static string|UnitEnum|null $navigationGroup = PanelGroup::Members;
 
     public static function getNavigationLabel(): string
     {
@@ -44,13 +50,14 @@ class ActivityResource extends PanelResource
         return $table
             ->modifyQueryUsing(fn (Builder $query): Builder => $query->with('botUser.telegramUser'))
             ->columns([
-                TextColumn::make('member')
-                    ->label((string) __('tbe-user-management::web.user'))
-                    ->state(fn (BotUserAction $record): string => $record->botUser instanceof BotUser ? BotUserResource::name($record->botUser) : '?')
+                PanelMembers::column('botUser', (string) __('tbe-user-management::web.user'))
                     ->url(fn (BotUserAction $record): ?string => $record->botUser instanceof BotUser ? ViewBotUser::getUrl(['record' => $record->botUser]) : null),
                 ...self::actionColumns(),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('id', 'desc')
+            ->persistSearchInSession()
+            ->emptyStateIcon(Heroicon::OutlinedClock)
+            ->emptyStateHeading((string) __('tbe-user-management::web.empty.activity'));
     }
 
     /** @return list<TextColumn> */
@@ -60,7 +67,7 @@ class ActivityResource extends PanelResource
             TextColumn::make('action')->label((string) __('tbe-user-management::web.action'))->wrap()->limit(200)->searchable(),
             TextColumn::make('update_type')->label((string) __('tbe-user-management::web.update_type'))->badge()->color('gray'),
             TextColumn::make('state')->label((string) __('tbe-user-management::web.state'))->placeholder('—')->toggleable(isToggledHiddenByDefault: true),
-            TextColumn::make('created_at')->label((string) __('tbe-user-management::web.when'))->dateTime()->sortable(),
+            PanelDates::dateTime(TextColumn::make('created_at'))->label((string) __('tbe-user-management::web.when'))->sortable(),
         ];
     }
 

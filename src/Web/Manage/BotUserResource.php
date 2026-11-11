@@ -9,13 +9,17 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use TelegramBotEssentials\Essence\Models\BotUser;
-use TelegramBotEssentials\Essence\Models\TelegramUser;
+use TelegramBotEssentials\Essence\Web\Filament\PanelDates;
+use TelegramBotEssentials\Essence\Web\Filament\PanelGroup;
+use TelegramBotEssentials\Essence\Web\Filament\PanelMembers;
 use TelegramBotEssentials\Essence\Web\Filament\PanelResource;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserFilter;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
 use TelegramBotEssentials\UserManagement\Telegram\Features\Admin\BotUsersFeature;
 use TelegramBotEssentials\UserManagement\Web\Widgets\MemberStats;
+use UnitEnum;
 
 /**
  * The bot's members. Filters and sorts come from the same registries as the
@@ -35,6 +39,29 @@ class BotUserResource extends PanelResource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
     protected static ?int $navigationSort = -10;
+
+    protected static string|UnitEnum|null $navigationGroup = PanelGroup::Members;
+
+    /** @return list<string> */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['telegramUser.username', 'telegramUser.first_name', 'telegramUser.last_name', 'telegramUser.peer_id'];
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return PanelMembers::label($record);
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return ViewBotUser::getUrl(['record' => $record]);
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with('telegramUser');
+    }
 
     public static function getNavigationLabel(): string
     {
@@ -74,8 +101,8 @@ class BotUserResource extends PanelResource
             IconColumn::make('suspend')->label((string) __('tbe-user-management::web.suspended'))->boolean()
                 ->trueIcon(Heroicon::OutlinedNoSymbol)->falseIcon(Heroicon::OutlinedCheck)
                 ->trueColor('danger')->falseColor('gray'),
-            TextColumn::make('last_interaction')->label((string) __('tbe-user-management::bot_users.sorts.last_interaction'))->since()->sortable(),
-            TextColumn::make('created_at')->label((string) __('tbe-user-management::bot_users.sorts.created_at'))->since()->sortable(),
+            PanelDates::since(TextColumn::make('last_interaction'))->label((string) __('tbe-user-management::bot_users.sorts.last_interaction'))->sortable(),
+            PanelDates::since(TextColumn::make('created_at'))->label((string) __('tbe-user-management::bot_users.sorts.created_at'))->sortable(),
         ];
 
         // Each package's sort: its value per member, ordered the way the bot orders it.
@@ -96,33 +123,28 @@ class BotUserResource extends PanelResource
                 SelectFilter::make('segment')
                     ->label((string) __('tbe-user-management::web.segment'))
                     ->options(fn (): array => botUserFilters()->getFilters()
-                        ->mapWithKeys(fn (BotUserFilter $filter): array => [$filter->key => $filter->label()])
+                        ->mapWithKeys(fn (BotUserFilter $filter): array => [$filter->key => $filter->labelled()->forWeb()])
                         ->all())
                     ->default(fn (): string => botUserFilters()->getDefaultKey())
                     ->selectablePlaceholder(false)
                     ->query(fn (Builder $query, array $data): Builder => botUserFilters()->apply(is_string($data['value'] ?? null) ? $data['value'] : null, $query)),
             ])
             ->defaultSort('last_interaction', 'desc')
+            ->persistFiltersInSession()
+            ->persistSearchInSession()
+            ->emptyStateIcon(Heroicon::OutlinedUsers)
+            ->emptyStateHeading((string) __('tbe-user-management::web.empty.users'))
             ->recordUrl(fn (BotUser $record): string => ViewBotUser::getUrl(['record' => $record]));
     }
 
     public static function name(BotUser $user): string
     {
-        $telegramUser = $user->telegramUser;
-        if (! $telegramUser instanceof TelegramUser) {
-            return '?';
-        }
-
-        $name = trim((string) $telegramUser->full_name);
-
-        return $name !== '' ? $name : (string) $telegramUser->peer_id;
+        return PanelMembers::name($user);
     }
 
     public static function username(BotUser $user): ?string
     {
-        $telegramUser = $user->telegramUser;
-
-        return $telegramUser instanceof TelegramUser && filled($telegramUser->username) ? '@'.$telegramUser->username : null;
+        return PanelMembers::username($user);
     }
 
     public static function reachabilityColor(BotUser $user): string
