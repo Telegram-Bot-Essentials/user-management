@@ -12,6 +12,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Web\Filament\Concerns\GuardsResourcePage;
+use TelegramBotEssentials\UserManagement\DTOs\SectionSummary;
 use TelegramBotEssentials\UserManagement\DTOs\UserSection;
 use TelegramBotEssentials\UserManagement\Enums\SectionMode;
 use TelegramBotEssentials\UserManagement\Models\BotUserAction;
@@ -61,9 +62,10 @@ class ViewBotUser extends Page implements HasTable
     }
 
     /**
-     * What other packages show on the profile, in their order.
+     * What other packages show on the profile, in their order. A section with
+     * a summary becomes a stat card; one with bot wording only keeps it.
      *
-     * @return list<array{label: string, url: string|null, html: string|null}>
+     * @return list<array{summary: SectionSummary|null, label: string, url: string|null, html: string|null}>
      */
     public function sections(): array
     {
@@ -71,13 +73,19 @@ class ViewBotUser extends Page implements HasTable
 
         return array_values(userManagementSections()->getSectionsFor($member)
             ->map(function (UserSection $section) use ($member): array {
+                $summary = $section->summaryFor($member);
+
+                if ($summary !== null) {
+                    return ['summary' => $summary, 'label' => $summary->title, 'url' => $section->webUrlFor($member), 'html' => null];
+                }
+
                 if ($section->mode === SectionMode::INLINE) {
                     $text = $section->contentFor($member)['text'] ?? null;
 
-                    return ['label' => '', 'url' => null, 'html' => is_string($text) ? ListBotUsers::telegramHtml($text) : null];
+                    return ['summary' => null, 'label' => '', 'url' => null, 'html' => is_string($text) ? ListBotUsers::telegramHtml($text) : null];
                 }
 
-                return ['label' => $section->labelFor($member), 'url' => $section->webUrlFor($member), 'html' => null];
+                return ['summary' => null, 'label' => $section->labelFor($member), 'url' => $section->webUrlFor($member), 'html' => null];
             })
             ->filter(fn (array $section): bool => $section['label'] !== '' || $section['html'] !== null)
             ->all());
