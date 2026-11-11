@@ -14,11 +14,50 @@
             </dl>
         </x-filament::section>
 
-        @if ($sections = $this->sections())
+        @php($sections = collect($this->sections()))
+        @php($cards = $sections->whereNotNull('summary'))
+        @php($rest = $sections->whereNull('summary'))
+        @if ($cards->isNotEmpty())
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1rem;">
+                @foreach ($cards as $card)
+                    @php($summary = $card['summary'])
+                    @if ($card['url'] !== null)
+                        <a href="{{ $card['url'] }}" style="display:block;color:inherit;text-decoration:none;">
+                    @endif
+                    <x-filament::section compact>
+                        <div style="display:flex;align-items:center;gap:.5rem;font-size:.875rem;opacity:.7;">
+                            @if ($summary->icon !== null)
+                                <x-filament::icon :icon="$summary->icon" style="width:1.25rem;height:1.25rem;" />
+                            @endif
+                            <span>{{ $summary->title }}</span>
+                            @if ($card['url'] !== null)
+                                <x-filament::icon icon="heroicon-m-arrow-up-right" style="width:1rem;height:1rem;margin-inline-start:auto;" />
+                            @endif
+                        </div>
+                        <div style="margin-top:.5rem;font-size:1.5rem;font-weight:600;line-height:1.3;">
+                            @if (is_array($summary->value))
+                                <div style="display:flex;flex-wrap:wrap;gap:.375rem;font-size:1rem;">
+                                    @foreach ($summary->value as $name)
+                                        <x-filament::badge>{{ $name }}</x-filament::badge>
+                                    @endforeach
+                                </div>
+                            @else
+                                {{ $summary->valueText() !== '' ? $summary->valueText() : '—' }}
+                            @endif
+                        </div>
+                    </x-filament::section>
+                    @if ($card['url'] !== null)
+                        </a>
+                    @endif
+                @endforeach
+            </div>
+        @endif
+
+        @if ($rest->isNotEmpty())
             <x-filament::section>
                 <x-slot name="heading">{{ __('tbe-user-management::web.more') }}</x-slot>
                 <div style="display:grid;gap:.5rem;">
-                    @foreach ($sections as $section)
+                    @foreach ($rest as $section)
                         @if ($section['html'] !== null)
                             <div style="line-height:1.7;">{!! $section['html'] !!}</div>
                         @elseif ($section['url'] !== null)
