@@ -8,6 +8,7 @@ use Livewire\Livewire;
 use TelegramBotEssentials\Essence\Models\BotUser;
 use TelegramBotEssentials\Essence\Web\WebAccounts;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
+use TelegramBotEssentials\UserManagement\DTOs\SectionSummary;
 use TelegramBotEssentials\UserManagement\DTOs\UserSection;
 use TelegramBotEssentials\UserManagement\Enums\SectionMode;
 use TelegramBotEssentials\UserManagement\Models\BotUserAction;
@@ -112,6 +113,24 @@ it('shows the profile with sections, linking those that have a web screen', func
         ->assertSee('https://example.test/wallet')
         ->assertSee('Invoices (2)')
         ->assertSee('pressed Buy');
+});
+
+it('draws a section with a summary as a card, values and names apart', function () {
+    userManagementSections()->addSection(new UserSection(
+        key: 'wallet', order: 1, mode: SectionMode::BUTTON, target: fn () => 'W#x', webUrl: fn () => 'https://example.test/wallet',
+        summary: fn () => new SectionSummary('Wallet', '120,000', '💰', 'heroicon-o-wallet'),
+    ));
+    userManagementSections()->addSection(new UserSection(
+        key: 'roles', order: 2, mode: SectionMode::BUTTON, target: fn () => 'R#x',
+        summary: fn () => new SectionSummary('Roles', ['Admin', 'Seller'], '🛡'),
+    ));
+
+    $this->get($this->url.'/'.$this->member->id)
+        ->assertOk()
+        ->assertSee('https://example.test/wallet')
+        ->assertSeeInOrder(['Wallet', '120,000', 'Roles', 'Admin', 'Seller'])
+        ->assertDontSee('💰')
+        ->assertDontSee('Wallet: 120,000');
 });
 
 it('copes with packages caching data on the member as relations', function () {
