@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
+use Filament\Livewire\GlobalSearch;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
 use TelegramBotEssentials\Essence\Models\BotUser;
+use TelegramBotEssentials\Essence\Support\Label;
 use TelegramBotEssentials\Essence\Web\WebAccounts;
+use TelegramBotEssentials\UserManagement\DTOs\BotUserFilter;
 use TelegramBotEssentials\UserManagement\DTOs\BotUserSort;
 use TelegramBotEssentials\UserManagement\DTOs\SectionSummary;
 use TelegramBotEssentials\UserManagement\DTOs\UserSection;
 use TelegramBotEssentials\UserManagement\Enums\SectionMode;
 use TelegramBotEssentials\UserManagement\Models\BotUserAction;
+use TelegramBotEssentials\UserManagement\Web\Manage\BotUserResource;
 use TelegramBotEssentials\UserManagement\Web\Manage\ListBotUsers;
 use TelegramBotEssentials\UserManagement\Web\Manage\ViewBotUser;
 use TelegramBotEssentials\UserManagement\Web\Widgets\ActiveMembersChart;
@@ -37,6 +41,30 @@ it('lists this bot\'s members only, with the overview', function () {
         ->assertSee('@member_one')
         ->assertDontSee('@outsider')
         ->assertSee(__('tbe-user-management::web.stats.members'));
+});
+
+it('finds this bot\'s members from the sidebar search, never another bot\'s', function () {
+    $otherBot = $this->makeBot(['unique_id' => 'other-bot']);
+    $this->makeBotUser($otherBot, 9500)->telegramUser->update(['username' => 'member_outsider', 'first_name' => 'Outsider']);
+    $this->enterPanel('manage', $this->bot, $this->account);
+
+    Livewire::test(GlobalSearch::class)->set('search', 'member')
+        ->assertSee('Mina')
+        ->assertDontSee('Outsider');
+});
+
+it('keeps the sidebar search from who may not manage users', function () {
+    $limited = $this->grant($this->makeBotUser($this->bot, 9403), 'web.manage');
+    $this->enterPanel('manage', $this->bot, $this->panelAccount($limited));
+
+    expect(BotUserResource::canGloballySearch())->toBeFalse();
+});
+
+it('shows a filter\'s plain name in the panel and its emoji in the bot', function () {
+    botUserFilters()->addFilter(new BotUserFilter(key: 'probe', label: fn () => new Label('With a role', '🛡')));
+
+    expect(botUserFilters()->getFilter('probe')->label())->toBe('🛡 With a role')
+        ->and(botUserFilters()->getFilter('probe')->labelled()->forWeb())->toBe('With a role');
 });
 
 it('keeps the screens from anyone without the ability', function () {
