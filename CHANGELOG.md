@@ -6,6 +6,40 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.30] - 2026-11-11
+
+### Added
+
+- Let a profile section link its web screen.
+- List members and their activity, open a profile.
+- Add the user management panel plugin.
+- Add the profile and stats views.
+- Register the plugin and its views.
+- Translate the screens to english.
+- Translate the screens to persian.
+- Show members as cards and charts.
+- Put the cards above the member list.
+- Add the member widgets to the dashboard.
+- Translate the cards to english.
+- Translate the cards to persian.
+- Draw summarized sections as stat cards.
+- Let a profile section give its data as a summary.
+- Hand section summaries to the profile page.
+- Build the profile from the shared components.
+- Add empty-list messages for members and activity.
+- Add persian empty-list messages.
+- Let a filter label carry its bot emoji apart.
+- Group, search and date the member screens.
+
+### Changed
+
+- Move suspending into a service.
+- Type the registries' collections.
+- Suspend from the bot through the service.
+- Share the user list's stats header.
+- Share the member counts.
+- Drop the text overview view.
+
 ## [0.0.29] - 2026-11-01
 
 ### Added
