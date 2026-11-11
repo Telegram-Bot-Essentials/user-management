@@ -4,26 +4,37 @@ namespace TelegramBotEssentials\UserManagement\DTOs;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
+use TelegramBotEssentials\Essence\Support\Label;
 
 class BotUserFilter
 {
     /**
-     * @param  string|Closure(): string  $label  resolved on every read via
-     *                                           label(); pass a Closure so a filter registered once at boot
-     *                                           still renders in the current bot's language
+     * @param  string|Label|Closure(): (string|Label)  $label  resolved on every read via
+     *                                                         label(); pass a Closure so a filter registered once at boot
+     *                                                         still renders in the current bot's language, and a Label
+     *                                                         to keep the bot's emoji out of the panel
      * @param  Closure|null  $apply  constrains the user list; null means no
      *                               constraint at all, which is what the "all" filter is
      */
     public function __construct(
         public string $key,
-        public string|Closure $label,
+        public string|Label|Closure $label,
         public ?Closure $apply = null,
         public bool|Closure $active = true,
     ) {}
 
+    /** The bot's wording, emoji included. */
     public function label(): string
     {
-        return $this->label instanceof Closure ? ($this->label)() : $this->label;
+        return $this->labelled()->forBot();
+    }
+
+    /** The name for both sides. */
+    public function labelled(): Label
+    {
+        $label = $this->label instanceof Closure ? ($this->label)() : $this->label;
+
+        return $label instanceof Label ? $label : Label::of((string) $label);
     }
 
     public function isActive(): bool
