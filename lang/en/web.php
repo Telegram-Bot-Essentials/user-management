@@ -35,4 +35,8 @@ return [
         'reachability' => 'Who a message reaches',
         'actions_per_day' => 'Actions per day',
     ],
+    'empty' => [
+        'users' => 'No members match',
+        'activity' => 'Nothing done in the bot yet',
+    ],
 ];
