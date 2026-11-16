@@ -6,6 +6,12 @@ stabilizes at 1.0 a `0.0.x` bump may carry breaking changes.
 
 ## [Unreleased]
 
+## [0.0.31] - 2026-11-16
+
+### Fixed
+
+- Count members on postgres.
+
 ## [0.0.30] - 2026-11-11
 
 ### Added
