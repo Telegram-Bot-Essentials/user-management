@@ -147,6 +147,8 @@ class BotUsersFeature
      * telegram_users is joined rather than counted separately because
      * deactivation lives there and outranks the per-bot status column, which
      * keeps the four reachability numbers mutually exclusive.
+     *
+     * Booleans are bound, not written as 1/0: Postgres has no boolean = integer.
      */
     public static function userCounts(): object
     {
@@ -161,8 +163,8 @@ class BotUsersFeature
             ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_day', [$day])
             ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_week', [$week])
             ->selectRaw('SUM(CASE WHEN bot_users.created_at > ? THEN 1 ELSE 0 END) as joined_month', [$month])
-            ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? AND bot_users.has_private_chat = 1 THEN 1 ELSE 0 END) as reachable', [BotUser::STATUS_ACTIVE])
-            ->selectRaw('SUM(CASE WHEN bot_users.has_private_chat = 0 THEN 1 ELSE 0 END) as group_only')
+            ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? AND bot_users.has_private_chat = ? THEN 1 ELSE 0 END) as reachable', [BotUser::STATUS_ACTIVE, true])
+            ->selectRaw('SUM(CASE WHEN bot_users.has_private_chat = ? THEN 1 ELSE 0 END) as group_only', [false])
             ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? THEN 1 ELSE 0 END) as blocked', [BotUser::STATUS_BLOCKED])
             ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NULL AND bot_users.status = ? THEN 1 ELSE 0 END) as unreachable', [BotUser::STATUS_UNREACHABLE])
             ->selectRaw('SUM(CASE WHEN telegram_users.deactivated_at IS NOT NULL THEN 1 ELSE 0 END) as deactivated')
